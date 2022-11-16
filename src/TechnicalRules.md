@@ -7,7 +7,7 @@
 - Always in s.
 - Always Double.
 ### Basics
-- Abbreviation is 't', always as prefix.
+- Abbreviation is 't', only as prefix.
 - t = d / t
 ### Output
 - Always in s.
@@ -21,7 +21,8 @@
 - Always in m/s.
 - Always Double.
 ### Basics
-- Abbreviation is 'v', always as prefix.
+- Round at 3 decimals.
+- Abbreviation is 'v', only as prefix.
 - v = d * (t<sub>exit</sub> - t<sub>entry</sub>)
 
 ## Distance
@@ -32,5 +33,5 @@
 - Always in m.
 - Always in Double.
 ### Basics
-- Abbreviation is 'd', always as prefix.
+- Abbreviation is 'd', only as prefix.
 - d = v * t
