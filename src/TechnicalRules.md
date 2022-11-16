@@ -1,4 +1,4 @@
-# Technical rules for project
+# Technical rules
 ## Time
 ### Input
 - Always in s.
