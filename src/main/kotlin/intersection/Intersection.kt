@@ -6,6 +6,7 @@ import utils.Constants.EMPTY_STRING
 import utils.Constants.NEWLINE
 import utils.Constants.ONE
 import utils.Constants.defaultArm
+import utils.Functions.printArray
 
 class Intersection(armNum_: Int = 4) {
     private var armNum: Int
@@ -27,14 +28,10 @@ class Intersection(armNum_: Int = 4) {
     }
 
     fun printStages(){
-        var output: String = EMPTY_STRING
-        var counter = ONE
-        for (stage in stages) {
-            output += "$counter. "
-            output += stage.toString()
-            output += NEWLINE
-            counter++
-        }
-        println(output)
+        printArray(stages)
+    }
+
+    fun printArms(){
+        printArray(arms)
     }
 }
