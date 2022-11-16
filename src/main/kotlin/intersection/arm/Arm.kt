@@ -1,6 +1,6 @@
-package intersection
+package intersection.arm
 
-import intersection.Lane
+import intersection.arm.lane.Lane
 import utils.Constants.DEFAULT_DOUBLE
 import utils.Constants.DEFAULT_INPUT_LANES
 import utils.Constants.DEFAULT_OUTPUT_LANES

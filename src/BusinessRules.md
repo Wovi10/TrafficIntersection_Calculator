@@ -6,8 +6,8 @@
 
 ### Definition: name -> type (default)
 - arms_Num -> Int (4)
-- arms -> Array(intersection.Arm) (null)
-- stages -> Array(intersection.Stage) (null)
+- arms -> Array(intersection.arm.Arm) (null)
+- stages -> Array(intersection.stage.Stage) (null)
 
 ### Methods
 - calculateStages(): Boolean
@@ -16,7 +16,7 @@
 
 </details>
 
-## intersection.Stage
+## intersection.stage.Stage
 <details>
     <summary>Show more</summary>
 
@@ -40,14 +40,14 @@
 
 </details>
 
-## intersection.Arm
+## intersection.arm.Arm
 <details>
     <summary>Show more</summary>
 
 ### Definition: name -> type (default)
 - inputLanes_num -> Int (3)
 - outputLanes_num -> Int (1)
-- lanes -> Array(intersection.Lane) (null)
+- lanes -> Array(intersection.arm.lane.Lane) (null)
 - width -> Double (2.75 + 0.40)
 - speed -> Double (13.889)
 
@@ -57,7 +57,7 @@
 
 </details>
 
-## intersection.Lane
+## intersection.arm.lane.Lane
 
 <details>
     <summary>Show more</summary>

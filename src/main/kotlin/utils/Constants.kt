@@ -1,7 +1,7 @@
 package utils
 
-import intersection.Arm
-import intersection.Lane
+import intersection.arm.Arm
+import intersection.arm.lane.Lane
 
 object Constants {
     val defaultArm: Arm = TODO()

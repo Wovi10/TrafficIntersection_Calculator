@@ -1,4 +1,0 @@
-package intersection
-
-class Stage {
-}
