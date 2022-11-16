@@ -15,4 +15,7 @@ object Constants {
     const val DEFAULT_INPUT_LANES: Int = 3
     const val DEFAULT_OUTPUT_LANES: Int = 1
 
+    const val EMPTY_STRING: String = ""
+    const val NEWLINE: String = "\n"
+    const val ONE: Int = 1
 }
