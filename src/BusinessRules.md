@@ -64,4 +64,6 @@
 
 ### Definition: name -> type (default)
 - width -> Double (2.75)
+- usage -> LaneUsage
+
 </details>
