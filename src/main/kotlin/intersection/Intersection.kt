@@ -2,33 +2,68 @@ package intersection
 
 import intersection.arm.Arm
 import intersection.stage.Stage
-import utils.Constants.EMPTY_STRING
-import utils.Constants.NEWLINE
-import utils.Constants.ONE
+import intersection.stage.light.Light
+import utils.Constants.ZERO
 import utils.Constants.defaultArm
 import utils.Functions.printArray
+import utils.Functions.printArrayList
 
-class Intersection(armNum_: Int = 4) {
-    private var armNum: Int
+class Intersection(numArms_: Int = 4) {
+    private var numArms: Int
     private var arms: Array<Arm>
-    private var stages: Array<Stage>
+    private var stages: ArrayList<Stage>
+    private var numLights: Int
+    private var intersectionLights: Array<Array<Light>>
 
     init {
-        armNum = armNum_
+        numArms = numArms_
         arms = initArms()
+        numLights = initNumLights()
+        intersectionLights = initLights()
         stages = calculateStages()
     }
 
-    private fun calculateStages(): Array<Stage> {
-        TODO("Not yet implemented")
+    private fun initNumLights(): Int {
+        var output = ZERO
+        for (arm in arms) {
+            output += arm.getLights().size
+        }
+        return output
+    }
+
+    private fun initLights(): Array<Array<Light>> {
+        intersectionLights = Array(numLights){ i ->
+            arms[i].getLights()
+        }
+        return intersectionLights
+    }
+
+    private fun calculateStages(): ArrayList<Stage> {
+        val output: ArrayList<Stage> = ArrayList()
+        for (i in intersectionLights){
+            val stage = Stage()
+            stage.calculateStates()
+            output.add(stage)
+        }
+        if (!allLightsAssigned()) calculateStages()
+        return output
+    }
+
+    private fun allLightsAssigned(): Boolean {
+        for (armLight in intersectionLights) {
+            for (light in armLight) {
+                if (!light.assigned) return false
+            }
+        }
+        return true
     }
 
     private fun initArms(): Array<Arm> {
-        return Array(armNum){defaultArm}
+        return Array(numArms){defaultArm}
     }
 
     fun printStages(){
-        printArray(stages)
+        printArrayList(stages)
     }
 
     fun printArms(){

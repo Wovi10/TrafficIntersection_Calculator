@@ -1,6 +1,7 @@
 package intersection.arm
 
 import intersection.arm.lane.Lane
+import intersection.stage.light.Light
 import utils.Constants.DEFAULT_DOUBLE
 import utils.Constants.DEFAULT_INPUT_LANES
 import utils.Constants.DEFAULT_OUTPUT_LANES
@@ -12,16 +13,18 @@ class Arm constructor(
     inputLanesNum_: Int = DEFAULT_INPUT_LANES,
     outputLanesNum_: Int = DEFAULT_OUTPUT_LANES,
     v_mPerS_: Double = DEFAULT_SPEED_ARM
-){
+) {
     private var inputLanesNum: Int
     private var outputLanesNum: Int
-    private var lanes: Array<Lane>
+    private var numLanes: Int
+    var lanes: Array<Lane>
     private var width: Double
     private var speed: Double
 
     init {
         inputLanesNum = inputLanesNum_
         outputLanesNum = outputLanesNum_
+        numLanes = inputLanesNum + outputLanesNum
         speed = v_mPerS_
         lanes = initLanes()
         width = initWidth()
@@ -38,7 +41,13 @@ class Arm constructor(
     }
 
     private fun initLanes(): Array<Lane> {
-        val numOfLanes = inputLanesNum + outputLanesNum
-        return Array(numOfLanes){defaultLane}
+        return Array(numLanes) { defaultLane }
+    }
+
+    fun getLights(): Array<Light> {
+        val lights: Array<Light> = Array(numLanes){i ->
+            lanes[i].light
+        }
+        return lights
     }
 }
