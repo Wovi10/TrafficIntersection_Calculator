@@ -1,13 +1,13 @@
 # Business rules
 
-## Intersection
+## intersection.Intersection
 <details>
     <summary>Show more</summary>
 
 ### Definition: name -> type (default)
 - arms_Num -> Int (4)
-- arms -> Array(Arm) (null)
-- stages -> Array(Stage) (null)
+- arms -> Array(intersection.Arm) (null)
+- stages -> Array(intersection.Stage) (null)
 
 ### Methods
 - calculateStages(): Boolean
@@ -16,7 +16,7 @@
 
 </details>
 
-## Stage
+## intersection.Stage
 <details>
     <summary>Show more</summary>
 
@@ -40,14 +40,14 @@
 
 </details>
 
-## Arm
+## intersection.Arm
 <details>
     <summary>Show more</summary>
 
 ### Definition: name -> type (default)
 - inputLanes_num -> Int (3)
 - outputLanes_num -> Int (1)
-- lanes -> Array(Lane) (null)
+- lanes -> Array(intersection.Lane) (null)
 - width -> Double (2.75 + 0.40)
 - speed -> Double (13.889)
 
@@ -57,7 +57,7 @@
 
 </details>
 
-## Lane
+## intersection.Lane
 
 <details>
     <summary>Show more</summary>
