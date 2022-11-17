@@ -24,6 +24,7 @@ object Constants {
 
     const val EMPTY_STRING: String = ""
     const val NEWLINE: String = "\n"
-    const val ONE: Int = 1
     const val ZERO: Int = 0
+    const val ONE: Int = 1
+    const val TWO: Int = 2
 }

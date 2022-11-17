@@ -1,10 +1,12 @@
 package intersection
 
 import intersection.arm.Arm
-import intersection.arm.lane.LaneUsage
+import intersection.arm.lane.Lane
+import intersection.arm.lane.LaneUsage.*
 import intersection.stage.Stage
 import intersection.stage.light.Light
 import utils.Constants.DEFAULT_DOUBLE
+import utils.Constants.ONE
 import utils.Constants.ZERO
 import utils.Constants.defaultArm
 import utils.Functions.printArray
@@ -66,19 +68,48 @@ class Intersection(numArms_: Int = 4) {
 
     fun calculateThroughTime(): Double {
         var t_through = DEFAULT_DOUBLE
-        var counter = ZERO
+        var speed: Double
+        var distance: Double
+
+        var armCounter = ZERO
         for (arm in arms) {
+            var laneCounter = ONE
             for (lane in arm.lanes) {
-                when(lane.usage){
-                    LaneUsage.Left -> TODO()
-                    LaneUsage.Straight -> TODO()
-                    LaneUsage.Right -> TODO()
+                val destinationArm = arms[armCounter + laneCounter]
+                speed = destinationArm.speed
+                when (lane.usage) {
+                    Left -> {
+                        distance = calculateDistanceToCover(arm, lane, destinationArm)
+                    }
+
+                    Straight -> {
+                    }
+
+                    Right -> {
+                    }
                 }
+                laneCounter++
             }
-            counter++
+            armCounter++
         }
 
         return t_through
+    }
+
+    private fun calculateDistanceToCover(
+        arm: Arm,
+        lane: Lane,
+        destinationArm: Arm
+    ): Double {
+        return calculateOutputLanesToCover(arm, lane) + calculateInputLanesToCover(destinationArm)
+    }
+
+    private fun calculateInputLanesToCover(destinationArm: Arm): Double {
+        return destinationArm.inputLanesNum * destinationArm.lanes[ZERO].width
+    }
+
+    private fun calculateOutputLanesToCover(arm: Arm, lane: Lane): Double {
+        return (arm.outputLanesNum * lane.width)
     }
 
     fun printStages() {

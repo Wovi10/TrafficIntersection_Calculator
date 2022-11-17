@@ -14,12 +14,12 @@ class Arm constructor(
     outputLanesNum_: Int = DEFAULT_OUTPUT_LANES,
     v_mPerS_: Double = DEFAULT_SPEED_ARM
 ) {
-    private var inputLanesNum: Int
-    private var outputLanesNum: Int
+    var inputLanesNum: Int
+    var outputLanesNum: Int
     private var numLanes: Int
     var lanes: Array<Lane>
     private var width: Double
-    private var speed: Double
+    var speed: Double
 
     init {
         inputLanesNum = inputLanesNum_
