@@ -1,7 +1,6 @@
 package intersection
 
-import org.junit.jupiter.api.Assertions.*
-import utils.Constants.defaultIntersection
+import org.junit.jupiter.api.Assertions.assertEquals
 
 internal class IntersectionTest {
     private var testObject: Intersection = Intersection()
@@ -15,9 +14,9 @@ internal class IntersectionTest {
     }
 
     @org.junit.jupiter.api.Test
-    fun calculateThroughTime() {
-        val result = testObject.calculateThroughTime()
-        println(result)
-
+    fun calculateThroughTime_returns12Items_succeeds() {
+        val result = testObject.calculateThroughTime().size
+        val expected = 12
+        assertEquals(expected, result)
     }
 }
