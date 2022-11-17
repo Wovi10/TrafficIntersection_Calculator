@@ -1,6 +1,14 @@
 package intersection.stage.light
 
-class Light {
-    private var state: LightState = LightState.Red
-    var assigned: Boolean = false
+class Light constructor(
+    state_: LightState = LightState.Red,
+    assigned_: Boolean = false
+){
+    private var state: LightState
+    var assigned: Boolean
+
+    init {
+        state = state_
+        assigned = assigned_
+    }
 }
