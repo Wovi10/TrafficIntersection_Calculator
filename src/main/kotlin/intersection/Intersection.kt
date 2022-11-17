@@ -5,6 +5,7 @@ import intersection.arm.lane.Lane
 import intersection.arm.lane.LaneUsage.*
 import intersection.stage.Stage
 import intersection.stage.light.Light
+import utils.Constants.DEFAULT_ARM_NUM
 import utils.Constants.FOUR
 import utils.Constants.ONE
 import utils.Constants.TWO
@@ -12,12 +13,13 @@ import utils.Constants.ZERO
 import utils.Functions.printArray
 import utils.Functions.printArrayList
 
-class Intersection(numArms_: Int = 4) {
+class Intersection(numArms_: Int = DEFAULT_ARM_NUM) {
     private var numArms: Int
-    private var arms: Array<Arm>
+    var arms: Array<Arm>
     private var stages: ArrayList<Stage>
     private var numLights: Int
     private var intersectionLights: Array<Array<Light>>
+    val throughTimes: ArrayList<Double>
 
     init {
         numArms = numArms_
@@ -25,6 +27,7 @@ class Intersection(numArms_: Int = 4) {
         numLights = initNumLights()
         intersectionLights = initLights()
         stages = calculateStages()
+        throughTimes = calculateThroughTime()
     }
 
     private fun initNumLights(): Int {
@@ -44,11 +47,7 @@ class Intersection(numArms_: Int = 4) {
 
     private fun calculateStages(): ArrayList<Stage> {
         val output: ArrayList<Stage> = ArrayList()
-//        for (i in intersectionLights) {
-//            val stage = Stage()
-//            stage.calculateStates()
-//            output.add(stage)
-//        }
+        // TODO calculateStages
 //        if (!allLightsAssigned()) calculateStages()
         return output
     }
@@ -66,19 +65,17 @@ class Intersection(numArms_: Int = 4) {
         return Array(numArms) { Arm() }
     }
 
-    fun calculateThroughTime(): ArrayList<Double> {
+    private fun calculateThroughTime(): ArrayList<Double> {
         val throughTimeArray: ArrayList<Double> = ArrayList()
         var armCounter = ZERO
 
         for (arm in arms) {
-            var laneCounter = ONE
-            for (i in ZERO until arm.inputLanesNum){
+            for (i in ZERO until arm.inputLanesNum) {
                 val lane = arm.lanes[i]
-                val speed = calculateSpeed(arms, armCounter, laneCounter)
-                val distance = calculateDistanceToCover(arms, lane, armCounter, laneCounter)
+                val speed = calculateSpeed(arms, armCounter, i + ONE)
+                val distance = calculateDistanceToCover(arms, lane, armCounter, i + ONE)
                 val throughTime = distance / speed
                 throughTimeArray.add(throughTime)
-                laneCounter++
             }
             armCounter++
         }
@@ -102,11 +99,14 @@ class Intersection(numArms_: Int = 4) {
         val nextIndex = if (armCounter + ONE != arms.size) armCounter + ONE else ZERO
         val destinationIndex =
             getDestinationIndex(armCounter, laneCounter, arms)
-        val halfThisLane = lane.width / TWO
+
         val thisArm = arms[armCounter]
         val nextArm = arms[nextIndex]
         val destinationArm = arms[destinationIndex]
+
+        val halfThisLane = lane.width / TWO
         val halfDestLane = (destinationArm.lanes[ZERO].width / TWO)
+
         val distance: Double = when (lane.usage) {
             Left -> calculateOutputLanesToCover(thisArm) + calculateInputLanesToCover(destinationArm) + halfThisLane
             Straight -> nextArm.numLanes * nextArm.lanes[ZERO].width
@@ -115,10 +115,10 @@ class Intersection(numArms_: Int = 4) {
         return distance
     }
 
-    private fun getDestinationIndex(armCounter: Int, laneCounter: Int, arms: Array<Arm>) =
-        if (armCounter + laneCounter >= arms.size) {
-            (armCounter - arms.size) + laneCounter
-        } else armCounter + laneCounter
+    private fun getDestinationIndex(armCounter: Int, laneCounter: Int, arms: Array<Arm>): Int {
+        return if (armCounter + laneCounter >= arms.size) (armCounter - arms.size) + laneCounter
+        else armCounter + laneCounter
+    }
 
     private fun calculateInputLanesToCover(armOfInputLanes: Arm): Double {
         return armOfInputLanes.inputLanesNum * armOfInputLanes.lanes[ZERO].width
