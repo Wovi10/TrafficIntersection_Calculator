@@ -43,12 +43,12 @@ class Intersection(numArms_: Int = 4) {
 
     private fun calculateStages(): ArrayList<Stage> {
         val output: ArrayList<Stage> = ArrayList()
-        for (i in intersectionLights) {
-            val stage = Stage()
-            stage.calculateStates()
-            output.add(stage)
-        }
-        if (!allLightsAssigned()) calculateStages()
+//        for (i in intersectionLights) {
+//            val stage = Stage()
+//            stage.calculateStates()
+//            output.add(stage)
+//        }
+//        if (!allLightsAssigned()) calculateStages()
         return output
     }
 
@@ -73,8 +73,7 @@ class Intersection(numArms_: Int = 4) {
             var laneCounter = ONE
 
             for (lane in arm.lanes) {
-                val destinationArm = arms[armCounter + laneCounter]
-                val speed = destinationArm.speed
+                val speed = calculateSpeed(arms, armCounter, laneCounter)
                 val distance = calculateDistanceToCover(arms, lane, armCounter, laneCounter)
                 val throughTime = distance / speed
                 throughTimeArray.add(throughTime)
@@ -86,6 +85,15 @@ class Intersection(numArms_: Int = 4) {
         return throughTimeArray
     }
 
+    private fun calculateSpeed(arms: Array<Arm>, armCounter: Int, laneCounter: Int): Double {
+        val destinationIndex =
+            if (armCounter + laneCounter >= arms.size) {
+                (armCounter - arms.size) + laneCounter
+            } else armCounter + laneCounter
+        val destinationArm = arms[destinationIndex]
+        return destinationArm.speed
+    }
+
     private fun calculateDistanceToCover(
         arms: Array<Arm>,
         lane: Lane,
@@ -95,7 +103,7 @@ class Intersection(numArms_: Int = 4) {
         val nextIndex = if (armCounter + ONE != arms.size) armCounter + ONE else ZERO
         val destinationIndex =
             if (armCounter + laneCounter >= arms.size) {
-                (armCounter / arms.size) + laneCounter
+                (armCounter - arms.size) + laneCounter
             } else armCounter + laneCounter
         val halfThisLane = lane.width / TWO
         val thisArm = arms[armCounter]
