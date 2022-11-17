@@ -16,7 +16,7 @@ class Arm constructor(
 ) {
     var inputLanesNum: Int
     var outputLanesNum: Int
-    private var numLanes: Int
+    var numLanes: Int
     var lanes: Array<Lane>
     private var width: Double
     var speed: Double

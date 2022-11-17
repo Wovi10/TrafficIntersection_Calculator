@@ -105,11 +105,10 @@ class Intersection(numArms_: Int = 4) {
         val thisArm = arms[armCounter]
         val destinationArm = arms[armCounter + laneCounter]
         val nextArm = arms[armCounter + ONE]
-        val distance: Double
-        when(lane.usage){
-            Left -> distance = calculateOutputLanesToCover(thisArm) + calculateInputLanesToCover(destinationArm)
-            Straight -> distance = calculateOutputLanesToCover(nextArm) + calculateInputLanesToCover(nextArm)
-            Right -> distance = calculateOutputLanesToCover(nextArm) + calculateInputLanesToCover(nextArm)
+        val distance: Double = when(lane.usage){
+            Left -> calculateOutputLanesToCover(thisArm) + calculateInputLanesToCover(destinationArm)
+            Straight -> nextArm.numLanes * nextArm.lanes[ZERO].width
+            Right -> calculateOutputLanesToCover(nextArm) + calculateInputLanesToCover(nextArm)
         }
         return distance
     }
