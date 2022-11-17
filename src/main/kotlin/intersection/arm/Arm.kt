@@ -41,6 +41,7 @@ class Arm constructor(
     }
 
     private fun initLanes(): Array<Lane> {
+        println("init lanes in arm")
         return Array(numLanes) { defaultLane }
     }
 

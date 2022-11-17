@@ -1,8 +1,10 @@
 package intersection
 
 import org.junit.jupiter.api.Assertions.*
+import utils.Constants.defaultIntersection
 
 internal class IntersectionTest {
+    private var testObject: Intersection = defaultIntersection
 
     @org.junit.jupiter.api.BeforeEach
     fun setUp() {
@@ -14,5 +16,8 @@ internal class IntersectionTest {
 
     @org.junit.jupiter.api.Test
     fun calculateThroughTime() {
+        val result = testObject.calculateThroughTime()
+        println(result)
+
     }
 }
