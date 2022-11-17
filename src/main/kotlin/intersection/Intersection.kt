@@ -79,7 +79,7 @@ class Intersection(numArms_: Int = 4) {
                 speed = destinationArm.speed
                 when (lane.usage) {
                     Left -> {
-                        distance = calculateDistanceToCover(arm, lane, destinationArm)
+                        distance = calculateDistanceToCover(arms, lane, armCounter, laneCounter)
                     }
 
                     Straight -> {
@@ -97,19 +97,29 @@ class Intersection(numArms_: Int = 4) {
     }
 
     private fun calculateDistanceToCover(
-        arm: Arm,
+        arms: Array<Arm>,
         lane: Lane,
-        destinationArm: Arm
+        armCounter: Int,
+        laneCounter: Int
     ): Double {
-        return calculateOutputLanesToCover(arm, lane) + calculateInputLanesToCover(destinationArm)
+        val thisArm = arms[armCounter]
+        val destinationArm = arms[armCounter + laneCounter]
+        val nextArm = arms[armCounter + ONE]
+        val distance: Double
+        when(lane.usage){
+            Left -> distance = calculateOutputLanesToCover(thisArm) + calculateInputLanesToCover(destinationArm)
+            Straight -> distance = calculateOutputLanesToCover(nextArm) + calculateInputLanesToCover(nextArm)
+            Right -> distance = calculateOutputLanesToCover(nextArm) + calculateInputLanesToCover(nextArm)
+        }
+        return distance
     }
 
-    private fun calculateInputLanesToCover(destinationArm: Arm): Double {
-        return destinationArm.inputLanesNum * destinationArm.lanes[ZERO].width
+    private fun calculateInputLanesToCover(armOfInputLanes: Arm): Double {
+        return armOfInputLanes.inputLanesNum * armOfInputLanes.lanes[ZERO].width
     }
 
-    private fun calculateOutputLanesToCover(arm: Arm, lane: Lane): Double {
-        return (arm.outputLanesNum * lane.width)
+    private fun calculateOutputLanesToCover(armOfOutputLane: Arm): Double {
+        return armOfOutputLane.outputLanesNum * armOfOutputLane.lanes[ZERO].width
     }
 
     fun printStages() {
