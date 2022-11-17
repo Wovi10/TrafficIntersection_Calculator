@@ -2,6 +2,7 @@ package utils
 
 import intersection.arm.Arm
 import intersection.arm.lane.Lane
+import intersection.arm.lane.LaneUsage
 import intersection.stage.light.Light
 
 object Constants {
@@ -16,6 +17,8 @@ object Constants {
 
     const val DEFAULT_INPUT_LANES: Int = 3
     const val DEFAULT_OUTPUT_LANES: Int = 1
+
+    val DEFAULT_LANE_USAGE: LaneUsage = LaneUsage.Left
 
     const val DEFAULT_STAGE_DURATION: Double = 5.0
 

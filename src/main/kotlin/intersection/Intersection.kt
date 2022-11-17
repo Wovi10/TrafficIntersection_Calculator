@@ -1,8 +1,10 @@
 package intersection
 
 import intersection.arm.Arm
+import intersection.arm.lane.LaneUsage
 import intersection.stage.Stage
 import intersection.stage.light.Light
+import utils.Constants.DEFAULT_DOUBLE
 import utils.Constants.ZERO
 import utils.Constants.defaultArm
 import utils.Functions.printArray
@@ -32,7 +34,7 @@ class Intersection(numArms_: Int = 4) {
     }
 
     private fun initLights(): Array<Array<Light>> {
-        intersectionLights = Array(numLights){ i ->
+        intersectionLights = Array(numLights) { i ->
             arms[i].getLights()
         }
         return intersectionLights
@@ -40,7 +42,7 @@ class Intersection(numArms_: Int = 4) {
 
     private fun calculateStages(): ArrayList<Stage> {
         val output: ArrayList<Stage> = ArrayList()
-        for (i in intersectionLights){
+        for (i in intersectionLights) {
             val stage = Stage()
             stage.calculateStates()
             output.add(stage)
@@ -59,14 +61,31 @@ class Intersection(numArms_: Int = 4) {
     }
 
     private fun initArms(): Array<Arm> {
-        return Array(numArms){defaultArm}
+        return Array(numArms) { defaultArm }
     }
 
-    fun printStages(){
+    fun calculateThroughTime(): Double {
+        var t_through = DEFAULT_DOUBLE
+        var counter = ZERO
+        for (arm in arms) {
+            for (lane in arm.lanes) {
+                when(lane.usage){
+                    LaneUsage.Left -> TODO()
+                    LaneUsage.Straight -> TODO()
+                    LaneUsage.Right -> TODO()
+                }
+            }
+            counter++
+        }
+
+        return t_through
+    }
+
+    fun printStages() {
         printArrayList(stages)
     }
 
-    fun printArms(){
+    fun printArms() {
         printArray(arms)
     }
 }
