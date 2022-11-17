@@ -6,6 +6,7 @@ import intersection.arm.lane.LaneUsage.*
 import intersection.stage.Stage
 import intersection.stage.light.Light
 import utils.Constants.ONE
+import utils.Constants.THREE
 import utils.Constants.TWO
 import utils.Constants.ZERO
 import utils.Functions.printArray
@@ -87,11 +88,9 @@ class Intersection(numArms_: Int = 4) {
 
     private fun calculateSpeed(arms: Array<Arm>, armCounter: Int, laneCounter: Int): Double {
         val destinationIndex =
-            if (armCounter + laneCounter >= arms.size) {
-                (armCounter - arms.size) + laneCounter
-            } else armCounter + laneCounter
+            getDestinationIndex(armCounter, laneCounter, arms)
         val destinationArm = arms[destinationIndex]
-        return destinationArm.speed
+        return destinationArm.speed / THREE
     }
 
     private fun calculateDistanceToCover(
@@ -102,9 +101,7 @@ class Intersection(numArms_: Int = 4) {
     ): Double {
         val nextIndex = if (armCounter + ONE != arms.size) armCounter + ONE else ZERO
         val destinationIndex =
-            if (armCounter + laneCounter >= arms.size) {
-                (armCounter - arms.size) + laneCounter
-            } else armCounter + laneCounter
+            getDestinationIndex(armCounter, laneCounter, arms)
         val halfThisLane = lane.width / TWO
         val thisArm = arms[armCounter]
         val nextArm = arms[nextIndex]
@@ -117,6 +114,11 @@ class Intersection(numArms_: Int = 4) {
         }
         return distance
     }
+
+    private fun getDestinationIndex(armCounter: Int, laneCounter: Int, arms: Array<Arm>) =
+        if (armCounter + laneCounter >= arms.size) {
+            (armCounter - arms.size) + laneCounter
+        } else armCounter + laneCounter
 
     private fun calculateInputLanesToCover(armOfInputLanes: Arm): Double {
         return armOfInputLanes.inputLanesNum * armOfInputLanes.lanes[ZERO].width
