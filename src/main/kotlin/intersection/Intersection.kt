@@ -5,8 +5,8 @@ import intersection.arm.lane.Lane
 import intersection.arm.lane.LaneUsage.*
 import intersection.stage.Stage
 import intersection.stage.light.Light
-import utils.Constants.DEFAULT_DOUBLE
 import utils.Constants.ONE
+import utils.Constants.TWO
 import utils.Constants.ZERO
 import utils.Constants.defaultArm
 import utils.Functions.printArray
@@ -66,34 +66,25 @@ class Intersection(numArms_: Int = 4) {
         return Array(numArms) { defaultArm }
     }
 
-    fun calculateThroughTime(): Double {
-        var t_through = DEFAULT_DOUBLE
-        var speed: Double
-        var distance: Double
-
+    fun calculateThroughTime(): ArrayList<Double> {
+        val throughTimeArray: ArrayList<Double> = ArrayList()
         var armCounter = ZERO
+
         for (arm in arms) {
             var laneCounter = ONE
+
             for (lane in arm.lanes) {
                 val destinationArm = arms[armCounter + laneCounter]
-                speed = destinationArm.speed
-                when (lane.usage) {
-                    Left -> {
-                        distance = calculateDistanceToCover(arms, lane, armCounter, laneCounter)
-                    }
-
-                    Straight -> {
-                    }
-
-                    Right -> {
-                    }
-                }
+                val speed = destinationArm.speed
+                val distance = calculateDistanceToCover(arms, lane, armCounter, laneCounter)
+                val throughTime = distance / speed
+                throughTimeArray.add(throughTime)
                 laneCounter++
             }
             armCounter++
         }
 
-        return t_through
+        return throughTimeArray
     }
 
     private fun calculateDistanceToCover(
@@ -102,13 +93,15 @@ class Intersection(numArms_: Int = 4) {
         armCounter: Int,
         laneCounter: Int
     ): Double {
+        val halfThisLane = lane.width / TWO
         val thisArm = arms[armCounter]
         val destinationArm = arms[armCounter + laneCounter]
+        val halfDestLane = (destinationArm.lanes[ZERO].width / TWO)
         val nextArm = arms[armCounter + ONE]
-        val distance: Double = when(lane.usage){
-            Left -> calculateOutputLanesToCover(thisArm) + calculateInputLanesToCover(destinationArm)
+        val distance: Double = when (lane.usage) {
+            Left -> calculateOutputLanesToCover(thisArm) + calculateInputLanesToCover(destinationArm) + halfThisLane
             Straight -> nextArm.numLanes * nextArm.lanes[ZERO].width
-            Right -> calculateOutputLanesToCover(nextArm) + calculateInputLanesToCover(nextArm)
+            Right -> halfThisLane + halfDestLane
         }
         return distance
     }
