@@ -1,11 +1,19 @@
 package intersection.arm.lane
 
 import intersection.stage.light.Light
-import utils.Constants.DEFAULT_LANE_USAGE
-import utils.Constants.defaultLight
+import utils.Constants.DEFAULT_LANE_WIDTH
 
-class Lane {
-    var width: Double = 0.0
-    var light: Light = defaultLight
-    var usage: LaneUsage = DEFAULT_LANE_USAGE
+class Lane constructor(
+    width_: Double = DEFAULT_LANE_WIDTH,
+    light_: Light = Light(),
+    usage_: LaneUsage = LaneUsage.Left
+){
+    var width: Double
+    var light: Light
+    var usage: LaneUsage
+    init {
+        width = width_
+        light = light_
+        usage = usage_
+    }
 }

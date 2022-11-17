@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.*
 import utils.Constants.defaultIntersection
 
 internal class IntersectionTest {
-    private var testObject: Intersection = defaultIntersection
+    private var testObject: Intersection = Intersection()
 
     @org.junit.jupiter.api.BeforeEach
     fun setUp() {

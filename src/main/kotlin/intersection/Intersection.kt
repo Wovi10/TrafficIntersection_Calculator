@@ -8,7 +8,6 @@ import intersection.stage.light.Light
 import utils.Constants.ONE
 import utils.Constants.TWO
 import utils.Constants.ZERO
-import utils.Constants.defaultArm
 import utils.Functions.printArray
 import utils.Functions.printArrayList
 
@@ -36,7 +35,7 @@ class Intersection(numArms_: Int = 4) {
     }
 
     private fun initLights(): Array<Array<Light>> {
-        intersectionLights = Array(numLights) { i ->
+        intersectionLights = Array(numArms) { i ->
             arms[i].getLights()
         }
         return intersectionLights
@@ -63,7 +62,7 @@ class Intersection(numArms_: Int = 4) {
     }
 
     private fun initArms(): Array<Arm> {
-        return Array(numArms) { defaultArm }
+        return Array(numArms) { Arm() }
     }
 
     fun calculateThroughTime(): ArrayList<Double> {
@@ -93,11 +92,16 @@ class Intersection(numArms_: Int = 4) {
         armCounter: Int,
         laneCounter: Int
     ): Double {
+        val nextIndex = if (armCounter + ONE != arms.size) armCounter + ONE else ZERO
+        val destinationIndex =
+            if (armCounter + laneCounter >= arms.size) {
+                (armCounter / arms.size) + laneCounter
+            } else armCounter + laneCounter
         val halfThisLane = lane.width / TWO
         val thisArm = arms[armCounter]
-        val destinationArm = arms[armCounter + laneCounter]
+        val nextArm = arms[nextIndex]
+        val destinationArm = arms[destinationIndex]
         val halfDestLane = (destinationArm.lanes[ZERO].width / TWO)
-        val nextArm = arms[armCounter + ONE]
         val distance: Double = when (lane.usage) {
             Left -> calculateOutputLanesToCover(thisArm) + calculateInputLanesToCover(destinationArm) + halfThisLane
             Straight -> nextArm.numLanes * nextArm.lanes[ZERO].width

@@ -7,12 +7,13 @@ import intersection.arm.lane.LaneUsage
 import intersection.stage.light.Light
 
 object Constants {
-    val defaultIntersection: Intersection = Intersection()
-    val defaultArm: Arm = Arm(4,1,50.0)
-    val defaultLane: Lane = Lane()
-    val defaultLight: Light = Light()
+    var defaultIntersection: Intersection = Intersection()
+    var defaultArm: Arm = Arm()
+    var defaultLane: Lane = Lane()
+    var defaultLight: Light = Light()
 
     const val MINIMUM_ARM_WIDTH: Double = 3.15
+    const val DEFAULT_LANE_WIDTH: Double = 2.75
     const val DEFAULT_SPEED_ARM: Double = 13.889
 
     const val DEFAULT_DOUBLE: Double = 0.0

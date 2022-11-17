@@ -8,6 +8,8 @@ import utils.Constants.DEFAULT_OUTPUT_LANES
 import utils.Constants.DEFAULT_SPEED_ARM
 import utils.Constants.MINIMUM_ARM_WIDTH
 import utils.Constants.defaultLane
+import utils.Functions.printArray
+import utils.Functions.printArrayList
 
 class Arm constructor(
     inputLanesNum_: Int = DEFAULT_INPUT_LANES,
@@ -41,8 +43,7 @@ class Arm constructor(
     }
 
     private fun initLanes(): Array<Lane> {
-        println("init lanes in arm")
-        return Array(numLanes) { defaultLane }
+        return Array(numLanes) { Lane() }
     }
 
     fun getLights(): Array<Light> {

@@ -13,7 +13,7 @@ class Stage(duration_: Double = DEFAULT_STAGE_DURATION) {
     }
 
     fun calculateStates(){
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
     }
 
     fun printLights(){
