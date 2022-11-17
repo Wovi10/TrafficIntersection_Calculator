@@ -12,6 +12,7 @@ object Functions {
         }
         println(output)
     }
+    
     fun <T> printArrayList(arrayListToPrint: ArrayList<T>){
         var output: String = Constants.EMPTY_STRING
         var counter = Constants.ONE
