@@ -72,14 +72,13 @@ class Intersection(numArms_: Int = 4) {
 
         for (arm in arms) {
             var laneCounter = ONE
-
-            for (lane in arm.lanes) {
+            for (i in ZERO until arm.inputLanesNum){
+                val lane = arm.lanes[i]
                 val speed = calculateSpeed(arms, armCounter, laneCounter)
                 val distance = calculateDistanceToCover(arms, lane, armCounter, laneCounter)
                 val throughTime = distance / speed
                 throughTimeArray.add(throughTime)
                 laneCounter++
-                if (laneCounter > arm.inputLanesNum) break
             }
             armCounter++
         }
