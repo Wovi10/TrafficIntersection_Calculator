@@ -1,11 +1,11 @@
 package intersection
 
+import intersection.arm.Arm
 import org.junit.jupiter.api.Assertions.assertEquals
 import utils.Constants.ZERO
 
 internal class IntersectionTest {
     private var testObject: Intersection = Intersection()
-
     @org.junit.jupiter.api.BeforeEach
     fun setUp() {
     }

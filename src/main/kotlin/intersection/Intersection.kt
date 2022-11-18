@@ -6,7 +6,6 @@ import intersection.arm.lane.LaneUsage.*
 import intersection.stage.Stage
 import intersection.stage.light.Light
 import utils.Constants.DEFAULT_ARM_NUM
-import utils.Constants.FOUR
 import utils.Constants.ONE
 import utils.Constants.THREE
 import utils.Constants.TWO
@@ -14,17 +13,26 @@ import utils.Constants.ZERO
 import utils.Functions.printArray
 import utils.Functions.printArrayList
 
-class Intersection(numArms_: Int = DEFAULT_ARM_NUM) {
+class Intersection {
     private var numArms: Int
     var arms: Array<Arm>
+
+    constructor(numArms_: Int = DEFAULT_ARM_NUM) {
+        numArms = numArms_
+        arms = initArms()
+    }
+
+    constructor(arms_: Array<Arm>) {
+        arms = arms_
+        numArms = arms.size
+    }
+
     private var stages: ArrayList<Stage>
     private var numLights: Int
     private var intersectionLights: Array<Array<Light>>
     val throughTimes: ArrayList<Double>
 
     init {
-        numArms = numArms_
-        arms = initArms()
         numLights = initNumLights()
         intersectionLights = initLights()
         stages = calculateStages()
@@ -89,7 +97,7 @@ class Intersection(numArms_: Int = DEFAULT_ARM_NUM) {
         val destinationIndex =
             getDestinationIndex(armCounter, laneCounter, arms)
         val destinationArm = arms[destinationIndex]
-        val divisor: Int = when(thisLane.usage){
+        val divisor: Int = when (thisLane.usage) {
             Left -> THREE
             Straight -> ONE
             Right -> THREE
