@@ -85,14 +85,16 @@ class Intersection(numArms_: Int = DEFAULT_ARM_NUM) {
     }
 
     private fun calculateSpeed(arms: Array<Arm>, armCounter: Int, laneCounter: Int): Double {
+        val thisLane = arms[armCounter].lanes[laneCounter]
         val destinationIndex =
             getDestinationIndex(armCounter, laneCounter, arms)
         val destinationArm = arms[destinationIndex]
-        val divisor: Int = when(arms[armCounter].lanes[laneCounter].usage){
+        val divisor: Int = when(thisLane.usage){
             Left -> THREE
             Straight -> ONE
             Right -> THREE
         }
+        println("$thisLane $divisor")
         return destinationArm.speed / divisor
     }
 
