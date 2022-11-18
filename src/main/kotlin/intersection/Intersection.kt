@@ -8,6 +8,7 @@ import intersection.stage.light.Light
 import utils.Constants.DEFAULT_ARM_NUM
 import utils.Constants.FOUR
 import utils.Constants.ONE
+import utils.Constants.THREE
 import utils.Constants.TWO
 import utils.Constants.ZERO
 import utils.Functions.printArray
@@ -87,7 +88,12 @@ class Intersection(numArms_: Int = DEFAULT_ARM_NUM) {
         val destinationIndex =
             getDestinationIndex(armCounter, laneCounter, arms)
         val destinationArm = arms[destinationIndex]
-        return destinationArm.speed / FOUR
+        val divisor: Int = when(arms[armCounter].lanes[laneCounter].usage){
+            Left -> THREE
+            Straight -> ONE
+            Right -> THREE
+        }
+        return destinationArm.speed / divisor
     }
 
     private fun calculateDistanceToCover(
