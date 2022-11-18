@@ -56,9 +56,19 @@ class Intersection {
 
     private fun calculateStages(): ArrayList<Stage> {
         val output: ArrayList<Stage> = ArrayList()
-        // TODO calculateStages
+        for (lightsOfArm in intersectionLights) {
+            for (light in lightsOfArm) {
+                calculateStage(light, output)
+            }
+        }
 //        if (!allLightsAssigned()) calculateStages()
         return output
+    }
+
+    private fun calculateStage(light: Light, output: ArrayList<Stage>) {
+        if (light.assigned) return
+        val stageToAdd = Stage()
+        stageToAdd.calculateStates()
     }
 
     private fun allLightsAssigned(): Boolean {

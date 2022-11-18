@@ -13,6 +13,7 @@ class Stage(duration_: Double = DEFAULT_STAGE_TIME) {
     }
 
     fun calculateStates(){
+
         TODO("Not yet implemented")
     }
 
