@@ -16,8 +16,6 @@ class Light constructor(
     }
 
     override fun toString(): String {
-        return "$state, $name"
+        return "State: $state, Name: $name"
     }
-
-
 }
