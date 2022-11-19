@@ -50,7 +50,12 @@ class Intersection {
         return output
     }
 
-    private fun initLights(): Array<Array<Light>> {
+    private fun initLights(): ArrayList<Array<Light>> {
+        val output: ArrayList<ArrayList<Light>> = ArrayList()
+        for (arm in arms){
+            val lightsToAdd: ArrayList<Light> = ArrayList()
+            lightsToAdd.add(arm.getLights())
+        }
         intersectionLights = Array(numArms) { i ->
             arms[i].getLights()
         }

@@ -53,9 +53,10 @@ class Arm constructor(
         return output
     }
 
-    fun getLights(): Array<Light> {
-        val lights: Array<Light> = Array(numLanes) { i ->
-            lanes[i].light
+    fun getLights(): ArrayList<Light> {
+        val lights: ArrayList<Light> = ArrayList()
+        for (lane in lanes){
+            lights.add(lane.light)
         }
         return lights
     }
