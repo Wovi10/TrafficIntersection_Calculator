@@ -52,9 +52,13 @@ class Intersection {
     private fun initDangerZones(): ArrayList<DangerZone> {
         val output: ArrayList<DangerZone> = ArrayList()
         val lanesPerArm = arms[ZERO].lanes.size
-        repeat(lanesPerArm){xCoord ->
-            repeat(lanesPerArm){yCoord ->
-                val dangerZoneToAdd = DangerZone(xCoord, yCoord)
+        repeat(lanesPerArm) { xCoord ->
+            repeat(lanesPerArm) { yCoord ->
+                var isOutput = false
+                if ((xCoord == ONE || xCoord == lanesPerArm) && (yCoord == ONE || yCoord == lanesPerArm)){
+                    isOutput = true
+                }
+                val dangerZoneToAdd = DangerZone(xCoord, yCoord, isOutput)
                 output.add(dangerZoneToAdd)
             }
         }

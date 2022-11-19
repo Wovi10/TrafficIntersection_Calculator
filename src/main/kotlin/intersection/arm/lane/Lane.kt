@@ -27,7 +27,7 @@ class Lane constructor(
     fun setDangerZone(dangerZones: ArrayList<DangerZone>, armNr: Int, laneNr: Int, isOutput: Boolean): DangerZone{
         if (isOutput){
             if(armNr == ONE){
-                dangerZone = dangerZones[]
+
             }else if (armNr == TWO){
                 dangerZone = DangerZone()
             }
