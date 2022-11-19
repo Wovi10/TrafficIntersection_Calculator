@@ -35,7 +35,7 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
         name = CAR_STAGE_NAME
         for (armLight in allLights) {
             for (light in armLight) {
-                
+
             }
         }
         TODO("Not yet implemented")

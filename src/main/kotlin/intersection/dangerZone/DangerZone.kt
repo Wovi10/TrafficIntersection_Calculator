@@ -2,8 +2,9 @@ package intersection.dangerZone
 
 import utils.Constants.ONE
 
-class DangerZone(xCoord_: Int, yCoord_: Int) {
+class DangerZone(xCoord_: Int = ONE, yCoord_: Int = ONE, isOutput_: Boolean = false) {
     var inUse: Boolean = false
+    var isOutput: Boolean = isOutput_
     private val xCoord: Int = xCoord_
     private val yCoord: Int = yCoord_
     val connectedDangerZones: ArrayList<DangerZone> = ArrayList()
