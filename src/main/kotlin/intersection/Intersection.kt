@@ -54,8 +54,10 @@ class Intersection {
     }
 
     private fun setStartDangerZones() {
+        var counter = ZERO
         for (arm in arms) {
-            arm.setStartDangerZones()
+            arm.setStartDangerZones(dangerZones,counter)
+            counter++
         }
     }
 
@@ -70,7 +72,7 @@ class Intersection {
         for (arm in arms) {
             var laneCounter = ZERO
             for (lane in arm.lanes) {
-                lane.setShortestPath()
+//                lane.setShortestPath()
             }
         }
         TODO("Not yet implemented")
