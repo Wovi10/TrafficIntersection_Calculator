@@ -5,7 +5,7 @@ class Light constructor(
     state_: LightState = LightState.Red,
     assigned_: Boolean = false
 ){
-    private var state: LightState
+    var state: LightState
     val name: String
     var assigned: Boolean
 

@@ -1,6 +1,8 @@
 package intersection.stage
 
 import intersection.stage.light.Light
+import intersection.stage.light.LightState
+import utils.Constants.CAR_STAGE_NAME
 import utils.Constants.DEFAULT_STAGE_TIME
 import utils.Constants.EMPTY_STRING
 import utils.Constants.NEWLINE
@@ -30,7 +32,12 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
     }
 
     private fun addCarStage(allLights: ArrayList<ArrayList<Light>>) {
+        name = CAR_STAGE_NAME
+        for (armLight in allLights) {
+            for (light in armLight) {
 
+            }
+        }
         TODO("Not yet implemented")
     }
 
@@ -39,8 +46,9 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
         for (armLights in allLights) {
             for (light in armLights) {
                 if (light.name == PED_LIGHT) {
-                    lights.add(light)
+                    light.state = LightState.Green
                     light.assigned = true
+                    lights.add(light)
                 }
             }
         }
