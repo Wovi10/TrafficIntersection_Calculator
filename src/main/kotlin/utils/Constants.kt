@@ -17,6 +17,8 @@ object Constants {
 
     const val EMPTY_STRING: String = ""
     const val NEWLINE: String = "\n"
+    const val PED_LIGHT: String = "PedLight"
+    const val NORMAL_LIGHT: String = "NormalLight"
 
     const val ZERO: Int = 0
     const val ONE: Int = 1

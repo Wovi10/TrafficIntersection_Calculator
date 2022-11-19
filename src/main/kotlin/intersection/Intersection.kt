@@ -6,7 +6,9 @@ import intersection.arm.lane.LaneUsage.*
 import intersection.stage.Stage
 import intersection.stage.light.Light
 import utils.Constants.DEFAULT_ARM_NUM
+import utils.Constants.NORMAL_LIGHT
 import utils.Constants.ONE
+import utils.Constants.PED_LIGHT
 import utils.Constants.THREE
 import utils.Constants.TWO
 import utils.Constants.ZERO
@@ -55,7 +57,7 @@ class Intersection {
         for (arm in arms){
             val lightsToAdd: ArrayList<Light> = ArrayList()
             if (hasPedCross) {
-                val pedLight = Light("PedLight")
+                val pedLight = Light(PED_LIGHT)
                 lightsToAdd.add(pedLight)
             }
             for (light in arm.getLights()) {
@@ -78,10 +80,15 @@ class Intersection {
         return output
     }
 
+    private fun addPedStage(output: ArrayList<Stage>) {
+        val stageToAdd = Stage()
+        stageToAdd.calculateStates(intersectionLights, PED_LIGHT)
+    }
+
     private fun calculateStage(light: Light, output: ArrayList<Stage>) {
         if (light.assigned) return
         val stageToAdd = Stage()
-        stageToAdd.calculateStates()
+        stageToAdd.calculateStates(intersectionLights, NORMAL_LIGHT)
     }
 
     private fun allLightsAssigned(): Boolean {
