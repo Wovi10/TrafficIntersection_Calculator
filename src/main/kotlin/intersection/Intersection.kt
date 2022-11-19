@@ -32,7 +32,7 @@ class Intersection {
 
     private var stages: ArrayList<Stage>
     private var numLights: Int
-    private var intersectionLights: Array<Array<Light>>
+    private var intersectionLights: ArrayList<ArrayList<Light>>
     val throughTimes: ArrayList<Double>
 
     init {
@@ -50,16 +50,20 @@ class Intersection {
         return output
     }
 
-    private fun initLights(): ArrayList<Array<Light>> {
+    private fun initLights(): ArrayList<ArrayList<Light>> {
         val output: ArrayList<ArrayList<Light>> = ArrayList()
         for (arm in arms){
             val lightsToAdd: ArrayList<Light> = ArrayList()
-            lightsToAdd.add(arm.getLights())
+            if (hasPedCross) {
+                val pedLight = Light("PedLight")
+                lightsToAdd.add(pedLight)
+            }
+            for (light in arm.getLights()) {
+                lightsToAdd.add(light)
+            }
+            output.add(lightsToAdd)
         }
-        intersectionLights = Array(numArms) { i ->
-            arms[i].getLights()
-        }
-        return intersectionLights
+        return output
     }
 
     private fun calculateStages(): ArrayList<Stage> {
