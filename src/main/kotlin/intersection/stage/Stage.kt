@@ -6,14 +6,18 @@ import utils.Constants.EMPTY_STRING
 import utils.Constants.NEWLINE
 import utils.Constants.PED_LIGHT
 import utils.Constants.PED_STAGE_NAME
+import utils.Constants.TAB
+import utils.Functions.getArrayList
 import utils.Functions.printArrayList
 
-class Stage(duration_: Double = DEFAULT_STAGE_TIME) {
+class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
     private var duration: Double
     private var lights: ArrayList<Light> = ArrayList()
     private var name: String = EMPTY_STRING
+    private var stageNumber: Int
 
     init {
+        stageNumber = stageNum_
         duration = duration_
     }
 
@@ -46,12 +50,20 @@ class Stage(duration_: Double = DEFAULT_STAGE_TIME) {
         printArrayList(lights)
     }
 
+    private fun getLights(): String{
+        var output: String = EMPTY_STRING
+        for (light in lights) {
+            output += TAB + TAB + light
+            output += NEWLINE
+        }
+        return output
+    }
+
     override fun toString(): String {
-        return "Stage{$NEWLINE" +
-                "$duration: $duration, name: $name,$NEWLINE" +
-                "lights:$NEWLINE" +
-                "$lights$NEWLINE" +
-                "}"
+        return "Stage $stageNumber:$NEWLINE" +
+                "$TAB duration: $duration, name: $name,$NEWLINE" +
+                "$TAB lights:$NEWLINE" +
+                getLights()
     }
 
 

@@ -24,25 +24,27 @@ class Intersection {
         numArms = numArms_
         arms = initArms()
         hasPedCross = hasPedCross_
+        sharedConstCode()
     }
 
     constructor(arms_: Array<Arm>, hasPedCross_: Boolean = true) {
         arms = arms_
         numArms = arms.size
         hasPedCross = hasPedCross_
+        sharedConstCode()
     }
 
-    private var stages: ArrayList<Stage>
-    private var numLights: Int
-    private var intersectionLights: ArrayList<ArrayList<Light>>
-    val throughTimes: ArrayList<Double>
-
-    init {
+    private fun sharedConstCode() {
         numLights = initNumLights()
         intersectionLights = initLights()
         stages = calculateStages()
         throughTimes = calculateThroughTime()
     }
+
+    private lateinit var stages: ArrayList<Stage>
+    private var numLights: Int = ZERO
+    private lateinit var intersectionLights: ArrayList<ArrayList<Light>>
+    lateinit var throughTimes: ArrayList<Double>
 
     private fun initNumLights(): Int {
         var output = ZERO
@@ -73,28 +75,29 @@ class Intersection {
         var counter = ZERO
         for (arm in intersectionLights) {
             if(counter % TWO == ZERO) {
-                addPedStage(output)
+                addPedStage(output, counter + ONE)
             }
             else{
                 for (light in arm) {
-                    calculateStage(light, output)
+                    calculateStage(light, output, counter + ONE)
                 }
             }
             counter++
         }
+        printArrayList(output)
 //        if (!allLightsAssigned()) calculateStages()
         return output
     }
 
-    private fun addPedStage(output: ArrayList<Stage>) {
-        val stageToAdd = Stage()
+    private fun addPedStage(output: ArrayList<Stage>, stageNum: Int) {
+        val stageToAdd = Stage(stageNum)
         stageToAdd.calculateStates(intersectionLights, PED_LIGHT)
         output.add(stageToAdd)
     }
 
-    private fun calculateStage(light: Light, output: ArrayList<Stage>) {
+    private fun calculateStage(light: Light, output: ArrayList<Stage>, stageNum: Int) {
         if (light.assigned) return
-        val stageToAdd = Stage()
+        val stageToAdd = Stage(stageNum)
         stageToAdd.calculateStates(intersectionLights, NORMAL_LIGHT)
     }
 
@@ -139,7 +142,6 @@ class Intersection {
             Straight -> ONE
             Right -> THREE
         }
-        println("$thisLane $divisor")
         return destinationArm.speed / divisor
     }
 

@@ -14,4 +14,10 @@ class Light constructor(
         state = state_
         assigned = assigned_
     }
+
+    override fun toString(): String {
+        return "$state, $name"
+    }
+
+
 }

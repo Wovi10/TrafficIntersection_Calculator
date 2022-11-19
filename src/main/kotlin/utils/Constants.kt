@@ -17,6 +17,7 @@ object Constants {
 
     const val EMPTY_STRING: String = ""
     const val NEWLINE: String = "\n"
+    const val TAB: String = "\t"
     const val PED_LIGHT: String = "PedLight"
     const val NORMAL_LIGHT: String = "NormalLight"
     const val PED_STAGE_NAME: String = "Pedestrian stage"
