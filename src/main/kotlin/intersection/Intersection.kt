@@ -3,6 +3,7 @@ package intersection
 import intersection.arm.Arm
 import intersection.arm.lane.Lane
 import intersection.arm.lane.LaneUsage.*
+import intersection.dangerZone.DangerZone
 import intersection.stage.Stage
 import intersection.stage.light.Light
 import utils.Constants.DEFAULT_ARM_NUM
@@ -19,6 +20,12 @@ class Intersection {
     private var numArms: Int
     var arms: Array<Arm>
     private val hasPedCross: Boolean
+
+    private lateinit var stages: ArrayList<Stage>
+    private var numLights: Int = ZERO
+    private lateinit var intersectionLights: ArrayList<ArrayList<Light>>
+    lateinit var throughTimes: ArrayList<Double>
+    private lateinit var dangerZones: ArrayList<DangerZone>
 
     constructor(numArms_: Int = DEFAULT_ARM_NUM, hasPedCross_: Boolean = true) {
         numArms = numArms_
@@ -37,14 +44,25 @@ class Intersection {
     private fun sharedConstCode() {
         numLights = initNumLights()
         intersectionLights = initLights()
+        dangerZones = initDangerZones()
         stages = calculateStages()
         throughTimes = calculateThroughTime()
     }
 
-    private lateinit var stages: ArrayList<Stage>
-    private var numLights: Int = ZERO
-    private lateinit var intersectionLights: ArrayList<ArrayList<Light>>
-    lateinit var throughTimes: ArrayList<Double>
+    private fun initDangerZones(): ArrayList<DangerZone> {
+        val output: ArrayList<DangerZone> = ArrayList()
+        val lanesPerArm = arms[ZERO].lanes.size
+        repeat(lanesPerArm){vertName ->
+            repeat(lanesPerArm){horiName ->
+                val dangerZoneToAdd = DangerZone(vertName, horiName)
+                output.add(dangerZoneToAdd)
+            }
+        }
+        for (dangerZone in output) {
+            dangerZone.setConnectedDangerZones(output)
+        }
+        return output
+    }
 
     private fun initNumLights(): Int {
         var output = ZERO
@@ -56,7 +74,7 @@ class Intersection {
 
     private fun initLights(): ArrayList<ArrayList<Light>> {
         val output: ArrayList<ArrayList<Light>> = ArrayList()
-        for (arm in arms){
+        for (arm in arms) {
             val lightsToAdd: ArrayList<Light> = ArrayList()
             if (hasPedCross) {
                 val pedLight = Light(PED_LIGHT)
@@ -74,10 +92,9 @@ class Intersection {
         val output: ArrayList<Stage> = ArrayList()
         var counter = ZERO
         for (arm in intersectionLights) {
-            if(counter % TWO == ZERO) {
+            if (counter % TWO == ZERO) {
                 addPedStage(output, counter + ONE)
-            }
-            else{
+            } else {
                 for (light in arm) {
                     calculateStage(light, output, counter + ONE)
                 }
