@@ -70,11 +70,17 @@ class Intersection {
 
     private fun calculateStages(): ArrayList<Stage> {
         val output: ArrayList<Stage> = ArrayList()
-        if(hasPedCross) addPedStage(output)
-        for (lightsOfArm in intersectionLights) {
-            for (light in lightsOfArm) {
-                calculateStage(light, output)
+        var counter = ZERO
+        for (arm in intersectionLights) {
+            if(counter % TWO == ZERO) {
+                addPedStage(output)
             }
+            else{
+                for (light in arm) {
+                    calculateStage(light, output)
+                }
+            }
+            counter++
         }
 //        if (!allLightsAssigned()) calculateStages()
         return output
@@ -83,6 +89,7 @@ class Intersection {
     private fun addPedStage(output: ArrayList<Stage>) {
         val stageToAdd = Stage()
         stageToAdd.calculateStates(intersectionLights, PED_LIGHT)
+        output.add(stageToAdd)
     }
 
     private fun calculateStage(light: Light, output: ArrayList<Stage>) {
