@@ -52,9 +52,9 @@ class Intersection {
     private fun initDangerZones(): ArrayList<DangerZone> {
         val output: ArrayList<DangerZone> = ArrayList()
         val lanesPerArm = arms[ZERO].lanes.size
-        repeat(lanesPerArm){vertName ->
-            repeat(lanesPerArm){horiName ->
-                val dangerZoneToAdd = DangerZone(vertName, horiName)
+        repeat(lanesPerArm){xCoord ->
+            repeat(lanesPerArm){yCoord ->
+                val dangerZoneToAdd = DangerZone(xCoord, yCoord)
                 output.add(dangerZoneToAdd)
             }
         }
