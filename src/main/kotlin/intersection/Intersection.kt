@@ -55,7 +55,8 @@ class Intersection {
         repeat(lanesPerArm) { xCoord ->
             repeat(lanesPerArm) { yCoord ->
                 var isOutput = false
-                if ((xCoord == ONE || xCoord == lanesPerArm) && (yCoord == ONE || yCoord == lanesPerArm)){
+                if ((xCoord == ONE || xCoord == lanesPerArm) &&
+                    (yCoord == ONE || yCoord == lanesPerArm)){
                     isOutput = true
                 }
                 val dangerZoneToAdd = DangerZone(xCoord, yCoord, isOutput)
