@@ -13,7 +13,7 @@ object Constants {
     const val DEFAULT_OUTPUT_LANES_NUM: Int = 1
     const val DEFAULT_ARM_NUM: Int = 4
 
-    const val DEFAULT_DOUBLE: Double = 0.0
+    const val ZERO_DOUBLE: Double = 0.0
 
     const val EMPTY_STRING: String = ""
     const val NEWLINE: String = "\n"

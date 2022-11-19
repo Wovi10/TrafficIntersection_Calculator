@@ -13,6 +13,7 @@ import utils.Constants.PED_LIGHT
 import utils.Constants.THREE
 import utils.Constants.TWO
 import utils.Constants.ZERO
+import utils.Constants.ZERO_DOUBLE
 import utils.Functions.printArray
 import utils.Functions.printArrayList
 
@@ -45,8 +46,34 @@ class Intersection {
         numLights = initNumLights()
         intersectionLights = initLights()
         dangerZones = initDangerZones()
-        stages = calculateStages()
+        setOutputDangerZones()
+        setStartDangerZones()
+        setPaths()
         throughTimes = calculateThroughTime()
+        stages = calculateStages()
+    }
+
+    private fun setStartDangerZones() {
+        for (arm in arms) {
+            arm.setStartDangerZones()
+        }
+    }
+
+    private fun setOutputDangerZones() {
+        for (arm in arms) {
+            arm.setOutputDangerZones()
+        }
+    }
+
+    private fun setPaths() {
+        var armCounter = ZERO
+        for (arm in arms) {
+            var laneCounter = ZERO
+            for (lane in arm.lanes) {
+                lane.setShortestPath()
+            }
+        }
+        TODO("Not yet implemented")
     }
 
     private fun initDangerZones(): ArrayList<DangerZone> {
@@ -163,6 +190,7 @@ class Intersection {
             Left -> THREE
             Straight -> ONE
             Right -> THREE
+            Output -> ZERO
         }
         return destinationArm.speed / divisor
     }
@@ -188,6 +216,7 @@ class Intersection {
             Left -> calculateOutputLanesToCover(thisArm) + calculateInputLanesToCover(destinationArm) + halfThisLane
             Straight -> nextArm.numLanes * nextArm.lanes[ZERO].width
             Right -> halfThisLane + halfDestLane
+            Output -> ZERO_DOUBLE
         }
         return distance
     }

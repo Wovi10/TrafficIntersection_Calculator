@@ -1,12 +1,13 @@
 package intersection.arm.lane
 
-import intersection.arm.Arm
 import intersection.dangerZone.DangerZone
 import intersection.stage.light.Light
 import utils.Constants.DEFAULT_LANE_WIDTH
 import utils.Constants.NORMAL_LIGHT
 import utils.Constants.ONE
+import utils.Constants.THREE
 import utils.Constants.TWO
+import utils.Constants.ZERO
 
 class Lane constructor(
     usage_: LaneUsage = LaneUsage.Left,
@@ -16,7 +17,8 @@ class Lane constructor(
     var width: Double
     var light: Light
     var usage: LaneUsage
-    lateinit var dangerZone: DangerZone
+    lateinit var startDangerZone: DangerZone
+    lateinit var endDangerZone: DangerZone
 
     init {
         width = width_
@@ -24,15 +26,30 @@ class Lane constructor(
         usage = usage_
     }
 
-    fun setDangerZone(dangerZones: ArrayList<DangerZone>, armNr: Int, laneNr: Int, isOutput: Boolean): DangerZone{
-        if (isOutput){
-            if(armNr == ONE){
+    fun setShortestPath(dangerZones: ArrayList<DangerZone>, armNr: Int, laneNr: Int, isOutput: Boolean) {
+        
+    }
 
-            }else if (armNr == TWO){
-                dangerZone = DangerZone()
+    fun setStartDangerZone(dangerZones: ArrayList<DangerZone>, armNr: Int, laneNr: Int, numLanes: Int): DangerZone{
+        val index: Int = when (armNr) {
+            ZERO -> {
+                laneNr + armNr
+            }
+
+            ONE -> {
+                (numLanes * (laneNr + armNr)) - armNr
+            }
+
+            TWO -> {
+                (numLanes * armNr) + laneNr
+            }
+
+            else -> {
+                numLanes * laneNr
             }
         }
-        return dangerZone
+        startDangerZone = dangerZones[index]
+        return startDangerZone
     }
 
     override fun toString(): String {

@@ -3,12 +3,12 @@ package intersection.dangerZone
 import utils.Constants.ONE
 import utils.Constants.ZERO
 
-class DangerZone(xCoord_: Int = ONE, yCoord_: Int = ONE, isOutput_: Boolean = false) {
+class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = false) {
     var inUse: Boolean = false
     var isOutput: Boolean = isOutput_
-    private var sideLength: Int = ZERO
-    private val xCoord: Int = xCoord_
-    private val yCoord: Int = yCoord_
+    var sideLength: Int = ZERO
+    val xCoord: Int = xCoord_
+    val yCoord: Int = yCoord_
     val connectedDangerZones: ArrayList<DangerZone> = ArrayList()
 
     fun setConnectedDangerZones(allDangerZones: ArrayList<DangerZone>) {
