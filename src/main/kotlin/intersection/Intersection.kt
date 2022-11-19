@@ -16,15 +16,18 @@ import utils.Functions.printArrayList
 class Intersection {
     private var numArms: Int
     var arms: Array<Arm>
+    private val hasPedCross: Boolean
 
-    constructor(numArms_: Int = DEFAULT_ARM_NUM) {
+    constructor(numArms_: Int = DEFAULT_ARM_NUM, hasPedCross_: Boolean = true) {
         numArms = numArms_
         arms = initArms()
+        hasPedCross = hasPedCross_
     }
 
-    constructor(arms_: Array<Arm>) {
+    constructor(arms_: Array<Arm>, hasPedCross_: Boolean = true) {
         arms = arms_
         numArms = arms.size
+        hasPedCross = hasPedCross_
     }
 
     private var stages: ArrayList<Stage>
@@ -56,6 +59,7 @@ class Intersection {
 
     private fun calculateStages(): ArrayList<Stage> {
         val output: ArrayList<Stage> = ArrayList()
+        if(hasPedCross) addPedStage(output)
         for (lightsOfArm in intersectionLights) {
             for (light in lightsOfArm) {
                 calculateStage(light, output)
