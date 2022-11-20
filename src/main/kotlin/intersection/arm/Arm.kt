@@ -47,7 +47,7 @@ class Arm constructor(
     private fun initLanes(): ArrayList<Lane> {
         val output: ArrayList<Lane> = ArrayList()
         var counter = ZERO
-        var laneUsage: LaneUsage = LaneUsage.Left
+        var laneUsage: LaneUsage = LaneUsage.Output
         repeat(numLanes) {
             val laneToAdd = Lane(laneUsage)
             laneUsage = laneUsage.next()
