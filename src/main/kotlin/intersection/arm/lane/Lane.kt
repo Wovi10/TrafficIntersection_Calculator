@@ -61,7 +61,6 @@ class Lane constructor(
         val pathTrying: ArrayList<DangerZone> = ArrayList()
         val currentDangerZone = startDangerZone
         pathTrying.add(currentDangerZone)
-        println(startDangerZone.getCoords() + " " + endDangerZone.getCoords())
         tryConnectedDangerZone(currentDangerZone, pathTrying, shortestPath.size)
 
         if (pathTrying.size >= shortestPath.size && timesTried != ZERO) return shortestPath
@@ -131,12 +130,11 @@ class Lane constructor(
         val index: Int = when (armNr) {
             ZERO -> laneNr + armNr
             ONE -> (numLanes * (laneNr + armNr)) - armNr
-            TWO -> (numLanes * armNr) + laneNr
+            TWO -> (numLanes * armNr) + laneNr + ONE
             FOUR -> ZERO
             else -> ZERO
         }
         startDangerZone = dangerZones[index]
-        print("$index ")
         return startDangerZone
     }
 

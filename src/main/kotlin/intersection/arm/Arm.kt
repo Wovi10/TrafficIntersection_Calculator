@@ -75,8 +75,6 @@ class Arm constructor(
         var laneCounter = ZERO
         for (lane in lanes) {
             lane.setStartDangerZone(allDangerZones, armNr,laneCounter, numLanes)
-            if (lane.usage == LaneUsage.Output)print("$armNr ${lane.startDangerZone.getCoords()} ")
-            println()
             laneCounter++
         }
     }
