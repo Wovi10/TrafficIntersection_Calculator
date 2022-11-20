@@ -17,7 +17,7 @@ internal class IntersectionTest {
     @org.junit.jupiter.api.Test
     fun calculateThroughTime_returnsCorrectNumItems() {
         val answer = testObject.throughTimes
-        println(answer)
+//        println(answer)
         val result = answer.size
         var expected: Int = ZERO
         for (arm in testObject.arms){

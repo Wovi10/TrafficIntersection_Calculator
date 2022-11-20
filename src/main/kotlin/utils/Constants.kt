@@ -13,10 +13,15 @@ object Constants {
     const val DEFAULT_OUTPUT_LANES_NUM: Int = 1
     const val DEFAULT_ARM_NUM: Int = 4
 
-    const val DEFAULT_DOUBLE: Double = 0.0
+    const val ZERO_DOUBLE: Double = 0.0
 
     const val EMPTY_STRING: String = ""
     const val NEWLINE: String = "\n"
+    const val TAB: String = "\t"
+    const val PED_LIGHT: String = "PedLight"
+    const val NORMAL_LIGHT: String = "NormalLight"
+    const val PED_STAGE_NAME: String = "Pedestrian stage"
+    const val CAR_STAGE_NAME: String = "Car stage"
 
     const val ZERO: Int = 0
     const val ONE: Int = 1

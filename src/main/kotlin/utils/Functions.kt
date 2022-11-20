@@ -3,6 +3,9 @@ package utils
 import utils.Constants.EMPTY_STRING
 import utils.Constants.NEWLINE
 import utils.Constants.ONE
+import utils.Constants.TAB
+import utils.Constants.TWO
+import utils.Constants.ZERO
 
 object Functions {
     fun <T> printArray(arrayToPrint: Array<T>) {
@@ -23,6 +26,16 @@ object Functions {
             counter++
         }
         println(output)
+    }
+
+    fun <T> getArrayList(arrayListToPrint: ArrayList<T>): String {
+        var output: String = EMPTY_STRING
+        var counter = ONE
+        for (element in arrayListToPrint) {
+            output = addElementToOutput(output, counter, element)
+            counter++
+        }
+        return output
     }
 
     private fun <T> addElementToOutput(output: String, counter: Int, element: T): String {

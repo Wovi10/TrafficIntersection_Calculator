@@ -3,40 +3,109 @@ package intersection
 import intersection.arm.Arm
 import intersection.arm.lane.Lane
 import intersection.arm.lane.LaneUsage.*
+import intersection.dangerZone.DangerZone
 import intersection.stage.Stage
 import intersection.stage.light.Light
 import utils.Constants.DEFAULT_ARM_NUM
+import utils.Constants.NORMAL_LIGHT
 import utils.Constants.ONE
+import utils.Constants.PED_LIGHT
 import utils.Constants.THREE
 import utils.Constants.TWO
 import utils.Constants.ZERO
+import utils.Constants.ZERO_DOUBLE
 import utils.Functions.printArray
 import utils.Functions.printArrayList
 
 class Intersection {
     private var numArms: Int
     var arms: Array<Arm>
+    private val hasPedCross: Boolean
 
-    constructor(numArms_: Int = DEFAULT_ARM_NUM) {
+    private lateinit var stages: ArrayList<Stage>
+    private var numLights: Int = ZERO
+    private lateinit var intersectionLights: ArrayList<ArrayList<Light>>
+    lateinit var throughTimes: ArrayList<Double>
+    private lateinit var dangerZones: ArrayList<DangerZone>
+
+    constructor(numArms_: Int = DEFAULT_ARM_NUM, hasPedCross_: Boolean = true) {
         numArms = numArms_
         arms = initArms()
+        hasPedCross = hasPedCross_
+        sharedConstCode()
     }
 
-    constructor(arms_: Array<Arm>) {
+    constructor(arms_: Array<Arm>, hasPedCross_: Boolean = true) {
         arms = arms_
         numArms = arms.size
+        hasPedCross = hasPedCross_
+        sharedConstCode()
     }
 
-    private var stages: ArrayList<Stage>
-    private var numLights: Int
-    private var intersectionLights: Array<Array<Light>>
-    val throughTimes: ArrayList<Double>
-
-    init {
+    private fun sharedConstCode() {
         numLights = initNumLights()
         intersectionLights = initLights()
-        stages = calculateStages()
+        dangerZones = initDangerZones()
+        initLanes()
         throughTimes = calculateThroughTime()
+        stages = calculateStages()
+    }
+
+    private fun initLanes() {
+        setStartDangerZones()
+        setOutputDangerZones()
+        setPaths()
+    }
+
+    private fun setStartDangerZones() {
+        var armCounter = ZERO
+        for (arm in arms) {
+            arm.setStartDangerZones(dangerZones,armCounter)
+            armCounter++
+        }
+    }
+
+    private fun setOutputDangerZones() {
+        for (arm in arms) {
+            arm.setOutputDangerZones()
+        }
+    }
+
+    private fun setPaths() {
+        var armCounter = ZERO
+        for (arm in arms) {
+            var laneCounter = ZERO
+            for (lane in arm.lanes) {
+                setPath(lane, armCounter)
+                laneCounter++
+            }
+            armCounter++
+        }
+    }
+
+    private fun setPath(lane: Lane, armCounter: Int) {
+        if (lane.usage == Output) return
+        lane.setShortestPath(dangerZones, arms, armCounter)
+    }
+
+    private fun initDangerZones(): ArrayList<DangerZone> {
+        val output: ArrayList<DangerZone> = ArrayList()
+        val lanesPerArm = arms[ZERO].lanes.size
+        repeat(lanesPerArm) { xCoord ->
+            repeat(lanesPerArm) { yCoord ->
+                var isOutput = false
+                if ((xCoord == ZERO || xCoord == lanesPerArm) &&
+                    (yCoord == ZERO || yCoord == lanesPerArm)){
+                    isOutput = true
+                }
+                val dangerZoneToAdd = DangerZone(xCoord, yCoord, isOutput)
+                output.add(dangerZoneToAdd)
+            }
+        }
+        for (dangerZone in output) {
+            dangerZone.setConnectedDangerZones(output)
+        }
+        return output
     }
 
     private fun initNumLights(): Int {
@@ -47,18 +116,50 @@ class Intersection {
         return output
     }
 
-    private fun initLights(): Array<Array<Light>> {
-        intersectionLights = Array(numArms) { i ->
-            arms[i].getLights()
+    private fun initLights(): ArrayList<ArrayList<Light>> {
+        val output: ArrayList<ArrayList<Light>> = ArrayList()
+        for (arm in arms) {
+            val lightsToAdd: ArrayList<Light> = ArrayList()
+            if (hasPedCross) {
+                val pedLight = Light(PED_LIGHT)
+                lightsToAdd.add(pedLight)
+            }
+            for (light in arm.getLights()) {
+                lightsToAdd.add(light)
+            }
+            output.add(lightsToAdd)
         }
-        return intersectionLights
+        return output
     }
 
     private fun calculateStages(): ArrayList<Stage> {
         val output: ArrayList<Stage> = ArrayList()
-        // TODO calculateStages
+        var counter = ZERO
+        for (arm in intersectionLights) {
+            if (counter % TWO == ZERO) {
+                addPedStage(output, counter + ONE)
+            } else {
+                for (light in arm) {
+                    calculateStage(light, output, counter + ONE)
+                }
+            }
+            counter++
+        }
+        printArrayList(output)
 //        if (!allLightsAssigned()) calculateStages()
         return output
+    }
+
+    private fun addPedStage(output: ArrayList<Stage>, stageNum: Int) {
+        val stageToAdd = Stage(stageNum)
+        stageToAdd.calculateStates(intersectionLights, PED_LIGHT)
+        output.add(stageToAdd)
+    }
+
+    private fun calculateStage(light: Light, output: ArrayList<Stage>, stageNum: Int) {
+        if (light.assigned) return
+        val stageToAdd = Stage(stageNum)
+        stageToAdd.calculateStates(intersectionLights, NORMAL_LIGHT)
     }
 
     private fun allLightsAssigned(): Boolean {
@@ -101,8 +202,8 @@ class Intersection {
             Left -> THREE
             Straight -> ONE
             Right -> THREE
+            Output -> ZERO
         }
-        println("$thisLane $divisor")
         return destinationArm.speed / divisor
     }
 
@@ -127,6 +228,7 @@ class Intersection {
             Left -> calculateOutputLanesToCover(thisArm) + calculateInputLanesToCover(destinationArm) + halfThisLane
             Straight -> nextArm.numLanes * nextArm.lanes[ZERO].width
             Right -> halfThisLane + halfDestLane
+            Output -> ZERO_DOUBLE
         }
         return distance
     }
