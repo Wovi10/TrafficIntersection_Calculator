@@ -68,6 +68,7 @@ class Intersection {
     private fun setOutputDangerZones() {
         for (arm in arms) {
             arm.setOutputDangerZones()
+            println(arm.lanes[arm.inputLanesNum].startDangerZone.getCoords())
         }
     }
 
@@ -86,6 +87,7 @@ class Intersection {
     private fun setPath(lane: Lane, armCounter: Int) {
         if (lane.usage == Output) return
         lane.setShortestPath(dangerZones, arms, armCounter)
+//        lane.printPath()
     }
 
     private fun initDangerZones(): ArrayList<DangerZone> {

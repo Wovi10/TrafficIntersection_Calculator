@@ -1,6 +1,9 @@
 package intersection.dangerZone
 
+import utils.Constants.EMPTY_STRING
+import utils.Constants.NEWLINE
 import utils.Constants.ONE
+import utils.Constants.TAB
 import utils.Constants.ZERO
 
 class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = false) {
@@ -10,6 +13,7 @@ class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = 
     val xCoord: Int = xCoord_
     val yCoord: Int = yCoord_
     val connectedDangerZones: ArrayList<DangerZone> = ArrayList()
+    var connectedIndex: Int = ONE
 
     fun setConnectedDangerZones(allDangerZones: ArrayList<DangerZone>) {
         sideLength = allDangerZones.size
@@ -26,9 +30,8 @@ class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = 
         }
     }
 
-    private fun tryDangerZone(dangerZone: DangerZone, vertToTry: Int, horiToTry: Int, sideLength: Int): Boolean {
-        if(!betweenZeroAndSideLength(vertToTry, sideLength)) return false
-        if(!betweenZeroAndSideLength(horiToTry, sideLength)) return false
+    private fun tryDangerZone(dangerZone: DangerZone, xToTry: Int, yToTry: Int, sideLength: Int): Boolean {
+        if (dangerZone.xCoord != xToTry || dangerZone.yCoord != yToTry) return false
         connectedDangerZones.add(dangerZone)
         return true
     }
@@ -42,4 +45,28 @@ class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = 
     fun getConnectedDangerZone(): DangerZone {
         TODO("Not yet implemented")
     }
+
+    fun setNextConnectedIndex(){
+        connectedIndex++
+        if (connectedIndex == connectedDangerZones.size) connectedIndex = ZERO
+    }
+
+    fun getCoords(): String{
+        return "$xCoord$yCoord"
+    }
+
+    override fun toString(): String {
+        var output = EMPTY_STRING
+        output += "DangerZone:"
+        output += "$TAB$NEWLINE"
+        output += "isOutput: $isOutput"
+        output += "$TAB$NEWLINE"
+        output += "sideLength: $sideLength"
+        output += "$TAB$NEWLINE"
+        output += "Coords: $xCoord$yCoord"
+
+        return output
+    }
+
+
 }

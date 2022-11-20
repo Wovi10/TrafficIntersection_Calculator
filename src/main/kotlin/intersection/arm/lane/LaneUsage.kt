@@ -4,5 +4,14 @@ enum class LaneUsage {
     Left,
     Straight,
     Right,
-    Output
+    Output;
+
+    fun next(): LaneUsage{
+        return when (this){
+            Left -> Straight
+            Straight -> Right
+            Right -> Output
+            Output -> Left
+        }
+    }
 }

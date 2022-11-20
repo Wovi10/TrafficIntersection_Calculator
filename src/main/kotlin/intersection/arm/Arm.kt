@@ -47,8 +47,10 @@ class Arm constructor(
     private fun initLanes(): ArrayList<Lane> {
         val output: ArrayList<Lane> = ArrayList()
         var counter = ZERO
+        var laneUsage: LaneUsage = LaneUsage.Left
         repeat(numLanes) {
-            val laneToAdd = Lane(LaneUsage.values()[counter])
+            val laneToAdd = Lane(laneUsage)
+            laneUsage = laneUsage.next()
             if (counter == inputLanesNum - ONE) counter = ZERO else counter++
             output.add(laneToAdd)
         }
@@ -73,6 +75,8 @@ class Arm constructor(
         var laneCounter = ZERO
         for (lane in lanes) {
             lane.setStartDangerZone(allDangerZones, armNr,laneCounter, numLanes)
+            if (lane.usage == LaneUsage.Output)print("$armNr ${lane.startDangerZone.getCoords()} ")
+            println()
             laneCounter++
         }
     }
