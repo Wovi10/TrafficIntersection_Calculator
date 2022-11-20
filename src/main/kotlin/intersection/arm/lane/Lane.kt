@@ -5,6 +5,7 @@ import intersection.arm.lane.LaneUsage.*
 import intersection.dangerZone.DangerZone
 import intersection.stage.light.Light
 import utils.Constants.DEFAULT_LANE_WIDTH
+import utils.Constants.FOUR
 import utils.Constants.NORMAL_LIGHT
 import utils.Constants.ONE
 import utils.Constants.THREE
@@ -34,9 +35,37 @@ class Lane constructor(
         getShortestPath(dangerZones)
     }
 
-    private fun getShortestPath(dangerZones: java.util.ArrayList<DangerZone>) {
-        
+    private fun getShortestPath(dangerZones: ArrayList<DangerZone>) {
+        var shortestPath: ArrayList<DangerZone> = ArrayList()
+        var pathTried: ArrayList<DangerZone>
+        repeat(dangerZones.size){timesTried ->
+            pathTried = tryPath(shortestPath, timesTried)
+            if (pathTried.size < shortestPath.size || timesTried == ZERO){
+                shortestPath = pathTried
+            }
+        }
+
+        path = shortestPath
         TODO("Not yet implemented")
+    }
+
+    private fun tryPath(shortestPath: ArrayList<DangerZone>, timesTried: Int): ArrayList<DangerZone> {
+        val connectToTry: Int = when (ZERO) {
+            timesTried % FOUR -> ZERO
+            timesTried % THREE -> ONE
+            timesTried % TWO -> TWO
+            else -> THREE
+        }
+        val pathTrying: ArrayList<DangerZone> = ArrayList()
+        var currentDangerZone = startDangerZone
+        pathTrying.add(currentDangerZone)
+        while (currentDangerZone != endDangerZone){
+            currentDangerZone = currentDangerZone.connectedDangerZones[connectToTry]
+            pathTrying.add(currentDangerZone)
+            if (pathTrying.size >= shortestPath.size && timesTried > ZERO) return shortestPath
+        }
+
+        return pathTrying
     }
 
     private fun setEndDangerZone(dangerZones: ArrayList<DangerZone>, arms: Array<Arm>, armCounter: Int) {

@@ -13,14 +13,10 @@ class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = 
 
     fun setConnectedDangerZones(allDangerZones: ArrayList<DangerZone>) {
         sideLength = allDangerZones.size
-        setDangerZone(allDangerZones, xCoord - ONE, yCoord - ONE)
         setDangerZone(allDangerZones, xCoord - ONE, yCoord)
-        setDangerZone(allDangerZones, xCoord - ONE, yCoord + ONE)
         setDangerZone(allDangerZones, xCoord, yCoord - ONE)
         setDangerZone(allDangerZones, xCoord, yCoord + ONE)
-        setDangerZone(allDangerZones, xCoord + ONE, yCoord - ONE)
         setDangerZone(allDangerZones, xCoord + ONE, yCoord)
-        setDangerZone(allDangerZones, xCoord + ONE, yCoord + ONE)
     }
 
     private fun setDangerZone(allDangerZones: ArrayList<DangerZone>, vertToTry: Int, horiToTry: Int){
@@ -43,4 +39,7 @@ class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = 
     private fun biggerThanSideLength(vertToTry: Int, sideLength: Int) = vertToTry > sideLength
 
     private fun smallerThanZero(vertToTry: Int) = vertToTry < ZERO
+    fun getConnectedDangerZone(): DangerZone {
+        TODO("Not yet implemented")
+    }
 }
