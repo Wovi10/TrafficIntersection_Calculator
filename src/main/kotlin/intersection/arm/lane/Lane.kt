@@ -21,6 +21,7 @@ class Lane constructor(
     var usage: LaneUsage
     lateinit var startDangerZone: DangerZone
     lateinit var endDangerZone: DangerZone
+    lateinit var path: ArrayList<DangerZone>
 
     init {
         width = width_
@@ -30,6 +31,12 @@ class Lane constructor(
 
     fun setShortestPath(dangerZones: ArrayList<DangerZone>, arms: Array<Arm>, armCounter: Int) {
         setEndDangerZone(dangerZones, arms, armCounter)
+        getShortestPath(dangerZones)
+    }
+
+    private fun getShortestPath(dangerZones: java.util.ArrayList<DangerZone>) {
+        
+        TODO("Not yet implemented")
     }
 
     private fun setEndDangerZone(dangerZones: ArrayList<DangerZone>, arms: Array<Arm>, armCounter: Int) {
@@ -43,31 +50,28 @@ class Lane constructor(
 
     private fun setEndPreviousArm(arms: Array<Arm>, armCounter: Int): DangerZone {
         val armToUSe: Arm = if (armCounter != ZERO) {
-            arms[arms.size - ONE]
-        } else {
             arms[armCounter - ONE]
-        }
+        } else arms[arms.size - ONE]
         val index = armToUSe.outputDangerZones.size - ONE
+
         return armToUSe.outputDangerZones[index]
     }
 
     private fun setEndStraightArm(arms: Array<Arm>, armCounter: Int): DangerZone {
         val armToUse: Arm = if (armCounter >= arms.size / TWO) {
             arms[armCounter - TWO]
-        } else {
-            arms[armCounter + TWO]
-        }
+        } else arms[armCounter + TWO]
         var index = ZERO
         if (armToUse.outputDangerZones.size >= THREE) index += ONE
+
         return armToUse.outputDangerZones[index]
     }
 
     private fun setEndNextArm(arms: Array<Arm>, armCounter: Int): DangerZone {
         val armToUse: Arm = if (armCounter != arms.size) {
             arms[armCounter + ONE]
-        } else {
-            arms[ZERO]
-        }
+        } else arms[ZERO]
+
         return armToUse.outputDangerZones[ZERO]
     }
 

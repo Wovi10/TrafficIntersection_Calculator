@@ -77,7 +77,9 @@ class Intersection {
             var laneCounter = ZERO
             for (lane in arm.lanes) {
                 setPath(lane, armCounter)
+                laneCounter++
             }
+            armCounter++
         }
     }
 
