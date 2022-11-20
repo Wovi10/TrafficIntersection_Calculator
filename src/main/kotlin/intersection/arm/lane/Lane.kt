@@ -23,7 +23,7 @@ class Lane constructor(
     var usage: LaneUsage
     lateinit var startDangerZone: DangerZone
     lateinit var endDangerZone: DangerZone
-    lateinit var path: ArrayList<DangerZone>
+    var path: ArrayList<DangerZone> = ArrayList()
 
     init {
         width = width_
@@ -34,18 +34,30 @@ class Lane constructor(
     fun setShortestPath(dangerZones: ArrayList<DangerZone>, arms: Array<Arm>, armCounter: Int) {
         setEndDangerZone(arms, armCounter)
         getShortestPath(dangerZones)
+//        println("${startDangerZone.getCoords()} ${endDangerZone.getCoords()}")
 //        printPath()
     }
 
     private fun getShortestPath(dangerZones: ArrayList<DangerZone>) {
         var shortestPath: ArrayList<DangerZone> = initArrayList(dangerZones)
         var pathTried: ArrayList<DangerZone>
+        if (startDangerZone == endDangerZone) {
+            path.add(startDangerZone)
+            return
+        }
         repeat(dangerZones.size) { timesTried ->
-            pathTried = tryPath(shortestPath, timesTried)
-            if (pathTried.size < shortestPath.size || timesTried == ZERO) shortestPath = pathTried
+            pathTried = tryPath(shortestPath)
+            shortestPath = checkPath(pathTried, shortestPath, timesTried)
         }
 
         path = shortestPath
+    }
+
+    private fun checkPath(pathTried: ArrayList<DangerZone>, shortestPath: ArrayList<DangerZone>, timesTried: Int): ArrayList<DangerZone> {
+        if (timesTried == ZERO) return pathTried
+        if (pathTried.size < shortestPath.size) return pathTried
+
+        return shortestPath
     }
 
     private fun initArrayList(dangerZones: ArrayList<DangerZone>): ArrayList<DangerZone> {
@@ -56,13 +68,13 @@ class Lane constructor(
         return output
     }
 
-    private fun tryPath(shortestPath: ArrayList<DangerZone>, timesTried: Int): ArrayList<DangerZone> {
+    private fun tryPath(shortestPath: ArrayList<DangerZone>): ArrayList<DangerZone> {
         val pathTrying: ArrayList<DangerZone> = ArrayList()
         val currentDangerZone = startDangerZone
         pathTrying.add(currentDangerZone)
-        val hasArrived = tryConnectedDangerZone(currentDangerZone, pathTrying, shortestPath.size)
 
-        if (!hasArrived || (pathTrying.size >= shortestPath.size && timesTried != ZERO)) return shortestPath
+        val hasArrived = tryConnectedDangerZone(currentDangerZone, pathTrying, shortestPath.size)
+        if (!hasArrived) return shortestPath
         return pathTrying
     }
 
@@ -76,6 +88,11 @@ class Lane constructor(
         val directionIndex = currentDangerZone.connectedIndex
         val nextDangerZone = currentDangerZone.connectedDangerZones[directionIndex]
         currentDangerZone.setNextConnectedIndex()
+        if (nextDangerZone == endDangerZone){
+            pathTrying.add(nextDangerZone)
+            return true
+        }
+
         if (pathTrying.contains(nextDangerZone)){
             if (inLoop == FOUR) return false
             tryConnectedDangerZone(currentDangerZone, pathTrying, shortestPathSize, timesTried + ONE, inLoop + ONE)
@@ -131,8 +148,8 @@ class Lane constructor(
         val index: Int = when (armNr) {
             ZERO -> laneNr + armNr
             ONE -> (numLanes * numLanes) - (numLanes * (laneNr+ONE))
-            TWO -> (numLanes * (armNr + ONE)) + laneNr
-            FOUR -> armNr * (laneNr + ONE) - ONE
+            TWO -> (numLanes * numLanes) - (laneNr + ONE)
+            THREE -> armNr + (laneNr * numLanes)
             else -> ZERO
         }
         startDangerZone = dangerZones[index]
