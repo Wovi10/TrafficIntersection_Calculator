@@ -55,6 +55,8 @@ class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = 
         return "$xCoord$yCoord"
     }
 
+
+
     override fun toString(): String {
         var output = EMPTY_STRING
         output += "DangerZone:"
@@ -68,5 +70,15 @@ class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = 
         return output
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
+        other as DangerZone
+
+        if (xCoord != other.xCoord) return false
+        if (yCoord != other.yCoord) return false
+
+        return true
+    }
 }
