@@ -72,7 +72,6 @@ class Arm constructor(
     fun setStartDangerZones(allDangerZones: ArrayList<DangerZone>, armNr: Int) {
         var laneCounter = ZERO
         for (lane in lanes) {
-            if (lane.usage == LaneUsage.Output) return
             lane.setStartDangerZone(allDangerZones, armNr,laneCounter, numLanes)
             laneCounter++
         }

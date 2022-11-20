@@ -46,11 +46,15 @@ class Intersection {
         numLights = initNumLights()
         intersectionLights = initLights()
         dangerZones = initDangerZones()
-        setOutputDangerZones()
-        setStartDangerZones()
-        setPaths()
+        initLanes()
         throughTimes = calculateThroughTime()
         stages = calculateStages()
+    }
+
+    private fun initLanes() {
+        setStartDangerZones()
+        setOutputDangerZones()
+        setPaths()
     }
 
     private fun setStartDangerZones() {
@@ -72,10 +76,14 @@ class Intersection {
         for (arm in arms) {
             var laneCounter = ZERO
             for (lane in arm.lanes) {
-//                lane.setShortestPath()
+                setPath(lane, armCounter)
             }
         }
-        TODO("Not yet implemented")
+    }
+
+    private fun setPath(lane: Lane, armCounter: Int) {
+        if (lane.usage == Output) return
+        lane.setShortestPath(dangerZones, arms, armCounter)
     }
 
     private fun initDangerZones(): ArrayList<DangerZone> {
