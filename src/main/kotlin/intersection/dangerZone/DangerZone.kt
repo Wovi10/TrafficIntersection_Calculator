@@ -5,11 +5,12 @@ import utils.Constants.NEWLINE
 import utils.Constants.ONE
 import utils.Constants.TAB
 import utils.Constants.ZERO
+import utils.Functions.printArrayList
 
 class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = false) {
-    var inUse: Boolean = false
-    var isOutput: Boolean = isOutput_
-    var sideLength: Int = ZERO
+    private var inUse: Boolean = false
+    private var isOutput: Boolean = isOutput_
+    private var sideLength: Int = ZERO
     val xCoord: Int = xCoord_
     val yCoord: Int = yCoord_
     val connectedDangerZones: ArrayList<DangerZone> = ArrayList()
@@ -17,21 +18,22 @@ class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = 
 
     fun setConnectedDangerZones(allDangerZones: ArrayList<DangerZone>) {
         sideLength = allDangerZones.size
-        setDangerZone(allDangerZones, xCoord - ONE, yCoord)
-        setDangerZone(allDangerZones, xCoord, yCoord - ONE)
-        setDangerZone(allDangerZones, xCoord, yCoord + ONE)
-        setDangerZone(allDangerZones, xCoord + ONE, yCoord)
+        setDangerZone(allDangerZones, xCoord - ONE, yCoord) // Left
+        setDangerZone(allDangerZones, xCoord, yCoord + ONE) // Up
+        setDangerZone(allDangerZones, xCoord + ONE, yCoord) // Right
+        setDangerZone(allDangerZones, xCoord, yCoord - ONE) // Down
     }
 
-    private fun setDangerZone(allDangerZones: ArrayList<DangerZone>, vertToTry: Int, horiToTry: Int){
+    private fun setDangerZone(allDangerZones: ArrayList<DangerZone>, xToTry: Int, yToTry: Int){
         for (dangerZone in allDangerZones) {
-            val succeeded = tryDangerZone(dangerZone, vertToTry, horiToTry, sideLength)
+            val succeeded = tryDangerZone(dangerZone, xToTry, yToTry)
             if (succeeded) return
         }
     }
 
-    private fun tryDangerZone(dangerZone: DangerZone, xToTry: Int, yToTry: Int, sideLength: Int): Boolean {
-        if (dangerZone.xCoord != xToTry || dangerZone.yCoord != yToTry) return false
+    private fun tryDangerZone(dangerZone: DangerZone, xToTry: Int, yToTry: Int): Boolean {
+        if (dangerZone.xCoord != xToTry) return false
+        if (dangerZone.yCoord != yToTry) return false
         connectedDangerZones.add(dangerZone)
         return true
     }
@@ -42,8 +44,14 @@ class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = 
     private fun biggerThanSideLength(vertToTry: Int, sideLength: Int) = vertToTry > sideLength
 
     private fun smallerThanZero(vertToTry: Int) = vertToTry < ZERO
-    fun getConnectedDangerZone(): DangerZone {
-        TODO("Not yet implemented")
+
+    fun printConnectedDangerZone() {
+        var output = EMPTY_STRING
+        for (connectedDangerZone in connectedDangerZones) {
+            output += connectedDangerZone.getCoords()
+            output += TAB
+        }
+        println(output)
     }
 
     fun setNextConnectedIndex(){
@@ -80,5 +88,16 @@ class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = 
         if (yCoord != other.yCoord) return false
 
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = inUse.hashCode()
+        result = 31 * result + isOutput.hashCode()
+        result = 31 * result + sideLength
+        result = 31 * result + xCoord
+        result = 31 * result + yCoord
+        result = 31 * result + connectedDangerZones.hashCode()
+        result = 31 * result + connectedIndex
+        return result
     }
 }

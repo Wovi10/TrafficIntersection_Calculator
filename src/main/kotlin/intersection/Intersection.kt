@@ -58,10 +58,10 @@ class Intersection {
     }
 
     private fun setStartDangerZones() {
-        var counter = ZERO
+        var armCounter = ZERO
         for (arm in arms) {
-            arm.setStartDangerZones(dangerZones,counter)
-            counter++
+            arm.setStartDangerZones(dangerZones,armCounter)
+            armCounter++
         }
     }
 
@@ -94,8 +94,8 @@ class Intersection {
         repeat(lanesPerArm) { xCoord ->
             repeat(lanesPerArm) { yCoord ->
                 var isOutput = false
-                if ((xCoord == ONE || xCoord == lanesPerArm) &&
-                    (yCoord == ONE || yCoord == lanesPerArm)){
+                if ((xCoord == ZERO || xCoord == lanesPerArm) &&
+                    (yCoord == ZERO || yCoord == lanesPerArm)){
                     isOutput = true
                 }
                 val dangerZoneToAdd = DangerZone(xCoord, yCoord, isOutput)
