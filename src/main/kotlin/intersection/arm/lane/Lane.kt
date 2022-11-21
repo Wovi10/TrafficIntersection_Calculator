@@ -33,9 +33,12 @@ class Lane constructor(
 
     fun setShortestPath(dangerZones: ArrayList<DangerZone>, arms: Array<Arm>, armCounter: Int) {
         setEndDangerZone(arms, armCounter)
-        println("${startDangerZone.getCoords()} ${endDangerZone.getCoords()}")
-
         getShortestPath(dangerZones, armCounter)
+//        printWhenDebugging()
+    }
+
+    private fun printWhenDebugging() {
+        println("${startDangerZone.getCoords()} ${endDangerZone.getCoords()}")
         printPath()
         println()
     }
