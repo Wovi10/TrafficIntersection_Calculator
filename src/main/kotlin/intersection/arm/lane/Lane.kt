@@ -34,7 +34,7 @@ class Lane constructor(
     fun setShortestPath(dangerZones: ArrayList<DangerZone>, arms: Array<Arm>, armCounter: Int) {
         setEndDangerZone(arms, armCounter)
         getShortestPath(dangerZones, armCounter)
-//        printWhenDebugging()
+        printWhenDebugging()
     }
 
     private fun printWhenDebugging() {
@@ -88,23 +88,19 @@ class Lane constructor(
         armCounter: Int
     ): Boolean {
         var currentDangerZone = currentDangerZone_
-        currentDangerZone.connectedIndex = when (armCounter) {
+        currentDangerZone_.connectedIndex = when (armCounter) {
             ZERO -> ONE
             ONE -> TWO
             TWO -> ZERO
             else -> ONE
         }
-        var directionIndex = currentDangerZone.connectedIndex
-        var nextDangerZone = currentDangerZone.connectedDangerZones[directionIndex]
+        var nextDangerZone = setNextDangerZone(currentDangerZone_)
 
         var inLoop = ZERO
         while (nextDangerZone != endDangerZone) {
-            currentDangerZone.setNextConnectedIndex()
             if (pathTrying.contains(nextDangerZone)) {
                 if (inLoop == FOUR) return false
-
-                directionIndex = currentDangerZone.connectedIndex
-                nextDangerZone = currentDangerZone.connectedDangerZones[directionIndex]
+                nextDangerZone = setNextDangerZone(currentDangerZone)
                 inLoop++
             }
 
@@ -113,13 +109,17 @@ class Lane constructor(
             if (nextDangerZone == endDangerZone) return true
 
             currentDangerZone = nextDangerZone
-
-            directionIndex = currentDangerZone.connectedIndex
-            nextDangerZone = currentDangerZone.connectedDangerZones[directionIndex]
+            nextDangerZone = setNextDangerZone(currentDangerZone)
         }
         pathTrying.add(nextDangerZone)
 
         return true
+    }
+
+    private fun setNextDangerZone(currentDangerZone_: DangerZone): DangerZone{
+        val directionIndex = currentDangerZone_.connectedIndex
+        currentDangerZone_.setNextConnectedIndex()
+        return currentDangerZone_.connectedDangerZones[directionIndex]
     }
 
     private fun setEndDangerZone(arms: Array<Arm>, armCounter: Int) {
