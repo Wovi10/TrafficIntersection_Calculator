@@ -6,6 +6,7 @@ import intersection.dangerZone.DangerZone
 import intersection.stage.light.Light
 import utils.Constants.DEFAULT_LANE_WIDTH
 import utils.Constants.EMPTY_STRING
+import utils.Constants.FOUR
 import utils.Constants.NORMAL_LIGHT
 import utils.Constants.ONE
 import utils.Constants.THREE
@@ -33,8 +34,10 @@ class Lane constructor(
     fun setShortestPath(dangerZones: ArrayList<DangerZone>, arms: Array<Arm>, armCounter: Int) {
         setEndDangerZone(arms, armCounter)
         println("${startDangerZone.getCoords()} ${endDangerZone.getCoords()}")
+
         getShortestPath(dangerZones, armCounter)
         printPath()
+        println()
     }
 
     private fun getShortestPath(dangerZones: ArrayList<DangerZone>, armCounter: Int) {
@@ -91,19 +94,27 @@ class Lane constructor(
         var directionIndex = currentDangerZone.connectedIndex
         var nextDangerZone = currentDangerZone.connectedDangerZones[directionIndex]
 
+        var inLoop = ZERO
         while (nextDangerZone != endDangerZone) {
             currentDangerZone.setNextConnectedIndex()
-            if (pathTrying.contains(nextDangerZone)) return false
+            if (pathTrying.contains(nextDangerZone)) {
+                if (inLoop == FOUR) return false
+
+                directionIndex = currentDangerZone.connectedIndex
+                nextDangerZone = currentDangerZone.connectedDangerZones[directionIndex]
+                inLoop++
+            }
 
             pathTrying.add(nextDangerZone)
 
             if (nextDangerZone == endDangerZone) return true
 
+            currentDangerZone = nextDangerZone
+
             directionIndex = currentDangerZone.connectedIndex
             nextDangerZone = currentDangerZone.connectedDangerZones[directionIndex]
-
-            currentDangerZone = nextDangerZone
         }
+        pathTrying.add(nextDangerZone)
 
         return true
     }
