@@ -17,7 +17,6 @@ import utils.Constants.TWO
 import utils.Constants.ZERO
 import utils.Constants.ZERO_DOUBLE
 import utils.Functions.printArray
-import utils.Functions.printArrayList
 
 class Intersection {
     private var numArms: Int
@@ -137,14 +136,19 @@ class Intersection {
     private fun calculateStages(): ArrayList<Stage> {
         val output: ArrayList<Stage> = ArrayList()
         var counter = ZERO
+        var armCounter = ZERO
+        var laneCounter = ZERO
         while (!allLightsAssigned()){
             for (arm in intersectionLights) {
                 if (counter % TWO == ZERO) {
                     addPedStage(output, counter + ONE)
                 } else {
                     for (light in arm) {
-                        if (!lightInPreviousStage(output, light)) addStage(output, light, counter + ONE)
+                        val laneToAdd = arms[armCounter].lanes[laneCounter]
+                        if (!lightInPreviousStage(output, light)) addStage(output, light, laneToAdd, counter + ONE)
+                        laneCounter++
                     }
+                    armCounter++
                 }
                 counter++
             }
@@ -162,14 +166,14 @@ class Intersection {
 
     private fun addPedStage(output: ArrayList<Stage>, stageNum: Int) {
         val stageToAdd = Stage(stageNum)
-        stageToAdd.calculateStates(intersectionLights, PED_LIGHT)
+        stageToAdd.calculateStates(intersectionLights, PED_LIGHT, null)
         output.add(stageToAdd)
     }
 
-    private fun addStage(output: ArrayList<Stage>, light: Light, stageNum: Int) {
+    private fun addStage(output: ArrayList<Stage>, light: Light, laneToAdd: Lane, stageNum: Int) {
         if (light.assigned) return
         val stageToAdd = Stage(stageNum)
-        stageToAdd.calculateStates(intersectionLights, NORMAL_LIGHT)
+        stageToAdd.calculateStates(intersectionLights, NORMAL_LIGHT, laneToAdd)
         output.add(stageToAdd)
     }
 

@@ -1,5 +1,6 @@
 package intersection.stage
 
+import intersection.arm.lane.Lane
 import intersection.stage.light.Light
 import intersection.stage.light.LightState
 import utils.Constants.CAR_STAGE_NAME
@@ -10,7 +11,6 @@ import utils.Constants.PED_LIGHT
 import utils.Constants.PED_STAGE_NAME
 import utils.Constants.SPACE
 import utils.Constants.TAB
-import utils.Functions.printArrayList
 
 class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
     private var duration: Double
@@ -23,17 +23,19 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
         duration = duration_
     }
 
-    fun calculateStates(allLights: ArrayList<ArrayList<Light>>, lightName: String){
+    fun calculateStates(allLights: ArrayList<ArrayList<Light>>, lightName: String, laneToAdd_: Lane?){
         if (lightName == PED_LIGHT) {
             addPedStage(allLights)
             return
         }else{
-            addStage(allLights)
+            if (laneToAdd_ == null) return
+            val laneToAdd: Lane = laneToAdd_
+            addStage(allLights, laneToAdd)
             return
         }
     }
 
-    private fun addStage(allLights: ArrayList<ArrayList<Light>>) {
+    private fun addStage(allLights: ArrayList<ArrayList<Light>>, laneToAdd: Lane) {
         name = CAR_STAGE_NAME
         for (armLight in allLights) {
             for (light in armLight) {
