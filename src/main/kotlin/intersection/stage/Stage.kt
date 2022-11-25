@@ -9,7 +9,6 @@ import utils.Constants.NEWLINE
 import utils.Constants.PED_LIGHT
 import utils.Constants.PED_STAGE_NAME
 import utils.Constants.TAB
-import utils.Functions.getArrayList
 import utils.Functions.printArrayList
 
 class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
@@ -28,10 +27,10 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
             addPedStage(allLights)
             return
         }
-//        addCarStage(allLights)
+//        addStage(allLights)
     }
 
-    private fun addCarStage(allLights: ArrayList<ArrayList<Light>>) {
+    private fun addStage(allLights: ArrayList<ArrayList<Light>>) {
         name = CAR_STAGE_NAME
         for (armLight in allLights) {
             for (light in armLight) {

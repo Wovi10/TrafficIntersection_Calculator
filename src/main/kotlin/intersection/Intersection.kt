@@ -140,7 +140,7 @@ class Intersection {
                 addPedStage(output, counter + ONE)
             } else {
                 for (light in arm) {
-                    calculateStage(light, output, counter + ONE)
+                    addCarStage(output, light, counter + ONE)
                 }
             }
             counter++
@@ -156,7 +156,7 @@ class Intersection {
         output.add(stageToAdd)
     }
 
-    private fun calculateStage(light: Light, output: ArrayList<Stage>, stageNum: Int) {
+    private fun addCarStage(output: ArrayList<Stage>, light: Light, stageNum: Int) {
         if (light.assigned) return
         val stageToAdd = Stage(stageNum)
         stageToAdd.calculateStates(intersectionLights, NORMAL_LIGHT)
