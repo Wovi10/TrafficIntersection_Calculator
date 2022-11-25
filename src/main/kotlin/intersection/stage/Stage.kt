@@ -1,20 +1,24 @@
 package intersection.stage
 
+import intersection.arm.Arm
+import intersection.arm.lane.Lane
 import intersection.stage.light.Light
 import intersection.stage.light.LightState
-import utils.Constants.CAR_STAGE_NAME
+import utils.Constants.NORMAL_STAGE_NAME
 import utils.Constants.DEFAULT_STAGE_TIME
 import utils.Constants.EMPTY_STRING
 import utils.Constants.NEWLINE
+import utils.Constants.NORMAL_LIGHT
 import utils.Constants.PED_LIGHT
 import utils.Constants.PED_STAGE_NAME
+import utils.Constants.SPACE
 import utils.Constants.TAB
-import utils.Functions.getArrayList
-import utils.Functions.printArrayList
+import utils.Constants.ZERO
 
 class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
     private var duration: Double
-    private var lights: ArrayList<Light> = ArrayList()
+    var lights: ArrayList<Light> = ArrayList()
+    var lanes: ArrayList<Lane> = ArrayList()
     private var name: String = EMPTY_STRING
     private var stageNumber: Int
 
@@ -23,39 +27,71 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
         duration = duration_
     }
 
-    fun calculateStates(allLights: ArrayList<ArrayList<Light>>, lightName: String){
+    fun calculateStates(arms: Array<Arm>, lightName: String = NORMAL_LIGHT){
         if (lightName == PED_LIGHT) {
-            addPedStage(allLights)
+            addPedStage(arms)
+            return
+        }else{
+            addStage(arms)
             return
         }
-//        addCarStage(allLights)
     }
 
-    private fun addCarStage(allLights: ArrayList<ArrayList<Light>>) {
-        name = CAR_STAGE_NAME
-        for (armLight in allLights) {
-            for (light in armLight) {
-
-            }
-        }
-        TODO("Not yet implemented")
-    }
-
-    private fun addPedStage(allLights: ArrayList<ArrayList<Light>>) {
-        name = PED_STAGE_NAME
-        for (armLights in allLights) {
-            for (light in armLights) {
-                if (light.name == PED_LIGHT) {
-                    light.state = LightState.Green
-                    light.assigned = true
-                    lights.add(light)
+    private fun addStage(arms: Array<Arm>) {
+        name = NORMAL_STAGE_NAME
+        for (arm in arms) {
+            for (lane in arm.lanes) {
+                val lightToUse = lane.light
+                if(!pathIsObstructed(lane)){
+                    putPathInUse(lane)
+                    addLightToStage(lightToUse)
+                    lanes.add(lane)
                 }
             }
         }
     }
 
-    fun printLights(){
-        printArrayList(lights)
+    private fun putPathInUse(lane: Lane) {
+        for (dangerZone in lane.path) {
+            dangerZone.inUse = true
+        }
+    }
+
+    private fun pathIsObstructed(lane: Lane): Boolean {
+        for (dangerZone in lane.path) {
+            if (dangerZone.inUse){
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun addPedStage(arms: Array<Arm>) {
+        name = PED_STAGE_NAME
+        for (arm in arms) {
+            for (lane in arm.lanes) {
+                val lightToUse = lane.light
+                if (lightToUse.name == PED_LIGHT) {
+                    addLightToStage(lightToUse)
+                }
+            }
+        }
+    }
+
+    private fun addLightToStage(light: Light) {
+        light.state = LightState.Green
+        light.assigned = true
+        lights.add(light)
+    }
+
+    fun getLightsToPrint(): String{
+        var output = EMPTY_STRING
+        for (i in ZERO until lights.size){
+            output += lights[i].name
+            output += SPACE
+            output += lanes[i].startDangerZone
+        }
+        return output
     }
 
     private fun getLights(): String{

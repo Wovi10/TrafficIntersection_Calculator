@@ -1,3 +1,5 @@
+import intersection.Intersection
+
 /**
  * Traffic intersection
  * Give parameters to calculate red light times
@@ -6,5 +8,5 @@
  */
 fun main() {
     // TODO Traffic light time calculators
-    
+    var testObject: Intersection = Intersection()
 }

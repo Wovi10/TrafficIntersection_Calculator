@@ -1,5 +1,7 @@
 package intersection.stage.light
 
+import intersection.arm.lane.Lane
+
 class Light constructor(
     name_: String,
     state_: LightState = LightState.Red,

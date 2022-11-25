@@ -6,6 +6,7 @@ import intersection.dangerZone.DangerZone
 import intersection.stage.light.Light
 import utils.Constants.DEFAULT_LANE_WIDTH
 import utils.Constants.EMPTY_STRING
+import utils.Constants.FOUR
 import utils.Constants.NORMAL_LIGHT
 import utils.Constants.ONE
 import utils.Constants.THREE
@@ -22,7 +23,7 @@ class Lane constructor(
     var usage: LaneUsage
     lateinit var startDangerZone: DangerZone
     private lateinit var endDangerZone: DangerZone
-    private lateinit var path: ArrayList<DangerZone>
+    var path: ArrayList<DangerZone> = ArrayList()
 
     init {
         width = width_
@@ -32,9 +33,7 @@ class Lane constructor(
 
     fun setShortestPath(dangerZones: ArrayList<DangerZone>, arms: Array<Arm>, armCounter: Int) {
         setEndDangerZone(arms, armCounter)
-        println("${startDangerZone.getCoords()} ${endDangerZone.getCoords()}")
         getShortestPath(dangerZones, armCounter)
-        printPath()
     }
 
     private fun getShortestPath(dangerZones: ArrayList<DangerZone>, armCounter: Int) {
@@ -82,30 +81,38 @@ class Lane constructor(
         armCounter: Int
     ): Boolean {
         var currentDangerZone = currentDangerZone_
-        currentDangerZone.connectedIndex = when (armCounter) {
+        currentDangerZone_.connectedIndex = when (armCounter) {
             ZERO -> ONE
             ONE -> TWO
             TWO -> ZERO
             else -> ONE
         }
-        var directionIndex = currentDangerZone.connectedIndex
-        var nextDangerZone = currentDangerZone.connectedDangerZones[directionIndex]
+        var nextDangerZone = setNextDangerZone(currentDangerZone_)
 
+        var inLoop = ZERO
         while (nextDangerZone != endDangerZone) {
-            currentDangerZone.setNextConnectedIndex()
-            if (pathTrying.contains(nextDangerZone)) return false
+            if (pathTrying.contains(nextDangerZone)) {
+                if (inLoop == FOUR) return false
+                nextDangerZone = setNextDangerZone(currentDangerZone)
+                inLoop++
+            }
 
             pathTrying.add(nextDangerZone)
 
             if (nextDangerZone == endDangerZone) return true
 
-            directionIndex = currentDangerZone.connectedIndex
-            nextDangerZone = currentDangerZone.connectedDangerZones[directionIndex]
-
             currentDangerZone = nextDangerZone
+            nextDangerZone = setNextDangerZone(currentDangerZone)
         }
+        pathTrying.add(nextDangerZone)
 
         return true
+    }
+
+    private fun setNextDangerZone(currentDangerZone_: DangerZone): DangerZone{
+        val directionIndex = currentDangerZone_.connectedIndex
+        currentDangerZone_.setNextConnectedIndex()
+        return currentDangerZone_.connectedDangerZones[directionIndex]
     }
 
     private fun setEndDangerZone(arms: Array<Arm>, armCounter: Int) {
