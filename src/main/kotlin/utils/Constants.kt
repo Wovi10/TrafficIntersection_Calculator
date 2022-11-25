@@ -16,6 +16,7 @@ object Constants {
     const val ZERO_DOUBLE: Double = 0.0
 
     const val EMPTY_STRING: String = ""
+    const val SPACE: String = " "
     const val NEWLINE: String = "\n"
     const val TAB: String = "\t"
     const val PED_LIGHT: String = "PedLight"

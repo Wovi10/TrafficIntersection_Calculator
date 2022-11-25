@@ -8,6 +8,7 @@ import utils.Constants.EMPTY_STRING
 import utils.Constants.NEWLINE
 import utils.Constants.PED_LIGHT
 import utils.Constants.PED_STAGE_NAME
+import utils.Constants.SPACE
 import utils.Constants.TAB
 import utils.Functions.printArrayList
 
@@ -76,8 +77,14 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
         lights.add(light)
     }
 
-    fun printLights(){
-        printArrayList(lights)
+    fun getLightsToPrint(): String{
+        var output = EMPTY_STRING
+        for (light in lights) {
+            output += light.name
+            output += SPACE
+            output += light.lane.startDangerZone
+        }
+        return output
     }
 
     private fun getLights(): String{

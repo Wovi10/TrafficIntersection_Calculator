@@ -7,6 +7,8 @@ import intersection.dangerZone.DangerZone
 import intersection.stage.Stage
 import intersection.stage.light.Light
 import utils.Constants.DEFAULT_ARM_NUM
+import utils.Constants.EMPTY_STRING
+import utils.Constants.NEWLINE
 import utils.Constants.NORMAL_LIGHT
 import utils.Constants.ONE
 import utils.Constants.PED_LIGHT
@@ -147,8 +149,7 @@ class Intersection {
                 counter++
             }
         }
-        printArrayList(output)
-//        if (!allLightsAssigned()) calculateStages()
+        printStages(output)
         return output
     }
 
@@ -256,8 +257,13 @@ class Intersection {
         return armOfOutputLane.outputLanesNum * armOfOutputLane.lanes[ZERO].width
     }
 
-    fun printStages() {
-        printArrayList(stages)
+    private fun printStages(stages: ArrayList<Stage>) {
+        var output = EMPTY_STRING
+        for (stage in stages) {
+            output += stage.getLightsToPrint()
+            output += NEWLINE
+        }
+        println(output)
     }
 
     fun printArms() {
