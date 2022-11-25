@@ -11,10 +11,12 @@ import utils.Constants.PED_LIGHT
 import utils.Constants.PED_STAGE_NAME
 import utils.Constants.SPACE
 import utils.Constants.TAB
+import utils.Constants.ZERO
 
 class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
     private var duration: Double
     var lights: ArrayList<Light> = ArrayList()
+    var lanes: ArrayList<Lane> = ArrayList()
     private var name: String = EMPTY_STRING
     private var stageNumber: Int
 
@@ -35,26 +37,27 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
         }
     }
 
-    private fun addStage(allLights: ArrayList<ArrayList<Light>>, laneToAdd: Lane) {
+    private fun addStage(allLights: ArrayList<ArrayList<Light>>, lane: Lane) {
         name = CAR_STAGE_NAME
         for (armLight in allLights) {
             for (light in armLight) {
-                if(!pathIsObstructed(light)){
-                    putPathInUse(light)
+                if(!pathIsObstructed(lane)){
+                    putPathInUse(lane)
                     addLightToStage(light)
+                    lanes.add(lane)
                 }
             }
         }
     }
 
-    private fun putPathInUse(light: Light) {
-        for (dangerZone in light.lane.path) {
+    private fun putPathInUse(lane: Lane) {
+        for (dangerZone in lane.path) {
             dangerZone.inUse = true
         }
     }
 
-    private fun pathIsObstructed(light: Light): Boolean {
-        for (dangerZone in light.lane.path) {
+    private fun pathIsObstructed(lane: Lane): Boolean {
+        for (dangerZone in lane.path) {
             if (dangerZone.inUse){
                 return true
             }
@@ -81,10 +84,10 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
 
     fun getLightsToPrint(): String{
         var output = EMPTY_STRING
-        for (light in lights) {
-            output += light.name
+        for (i in ZERO until lights.size){
+            output += lights[i].name
             output += SPACE
-            output += light.lane.startDangerZone
+            output += lanes[i].startDangerZone
         }
         return output
     }

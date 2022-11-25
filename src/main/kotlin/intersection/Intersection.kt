@@ -17,6 +17,7 @@ import utils.Constants.TWO
 import utils.Constants.ZERO
 import utils.Constants.ZERO_DOUBLE
 import utils.Functions.printArray
+import utils.Functions.printArrayList
 
 class Intersection {
     private var numArms: Int
@@ -144,17 +145,27 @@ class Intersection {
                     addPedStage(output, counter + ONE)
                 } else {
                     for (light in arm) {
-                        val laneToAdd = arms[armCounter].lanes[laneCounter]
-                        if (!lightInPreviousStage(output, light)) addStage(output, light, laneToAdd, counter + ONE)
-                        laneCounter++
+                        if(light.name != PED_LIGHT){
+                            val laneToAdd = arms[armCounter].lanes[laneCounter]
+                            if (!lightInPreviousStage(output, light)) addStage(output, light, laneToAdd, counter + ONE)
+                            laneCounter++
+                        }
                     }
+                    laneCounter = ZERO
                     armCounter++
                 }
+                printStage(output[counter])
                 counter++
             }
+            armCounter = ZERO
         }
         printStages(output)
         return output
+    }
+
+    private fun printStage(stage: Stage) {
+        printArrayList(stage.lights)
+        printArrayList(stage.lights)
     }
 
     private fun lightInPreviousStage(output: ArrayList<Stage>, light: Light): Boolean {

@@ -10,7 +10,6 @@ class Light constructor(
     var state: LightState
     val name: String
     var assigned: Boolean
-    lateinit var lane: Lane
 
     init {
         name = name_

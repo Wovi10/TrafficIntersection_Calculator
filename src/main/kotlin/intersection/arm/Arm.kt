@@ -61,7 +61,6 @@ class Arm constructor(
         val lights: ArrayList<Light> = ArrayList()
         for (lane in lanes) {
             lights.add(lane.light)
-            lane.light.lane = lane
         }
         return lights
     }

@@ -23,7 +23,7 @@ class Lane constructor(
     var usage: LaneUsage
     lateinit var startDangerZone: DangerZone
     private lateinit var endDangerZone: DangerZone
-    lateinit var path: ArrayList<DangerZone>
+    var path: ArrayList<DangerZone> = ArrayList()
 
     init {
         width = width_
