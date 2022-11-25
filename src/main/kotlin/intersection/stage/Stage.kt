@@ -1,12 +1,14 @@
 package intersection.stage
 
+import intersection.arm.Arm
 import intersection.arm.lane.Lane
 import intersection.stage.light.Light
 import intersection.stage.light.LightState
-import utils.Constants.CAR_STAGE_NAME
+import utils.Constants.NORMAL_STAGE_NAME
 import utils.Constants.DEFAULT_STAGE_TIME
 import utils.Constants.EMPTY_STRING
 import utils.Constants.NEWLINE
+import utils.Constants.NORMAL_LIGHT
 import utils.Constants.PED_LIGHT
 import utils.Constants.PED_STAGE_NAME
 import utils.Constants.SPACE
@@ -25,25 +27,24 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
         duration = duration_
     }
 
-    fun calculateStates(allLights: ArrayList<ArrayList<Light>>, lightName: String, laneToAdd_: Lane?){
+    fun calculateStates(arms: Array<Arm>, lightName: String = NORMAL_LIGHT){
         if (lightName == PED_LIGHT) {
-            addPedStage(allLights)
+            addPedStage(arms)
             return
         }else{
-            if (laneToAdd_ == null) return
-            val laneToAdd: Lane = laneToAdd_
-            addStage(allLights, laneToAdd)
+            addStage(arms)
             return
         }
     }
 
-    private fun addStage(allLights: ArrayList<ArrayList<Light>>, lane: Lane) {
-        name = CAR_STAGE_NAME
-        for (armLight in allLights) {
-            for (light in armLight) {
+    private fun addStage(arms: Array<Arm>) {
+        name = NORMAL_STAGE_NAME
+        for (arm in arms) {
+            for (lane in arm.lanes) {
+                val lightToUse = lane.light
                 if(!pathIsObstructed(lane)){
                     putPathInUse(lane)
-                    addLightToStage(light)
+                    addLightToStage(lightToUse)
                     lanes.add(lane)
                 }
             }
@@ -65,12 +66,13 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
         return false
     }
 
-    private fun addPedStage(allLights: ArrayList<ArrayList<Light>>) {
+    private fun addPedStage(arms: Array<Arm>) {
         name = PED_STAGE_NAME
-        for (armLights in allLights) {
-            for (light in armLights) {
-                if (light.name == PED_LIGHT) {
-                    addLightToStage(light)
+        for (arm in arms) {
+            for (lane in arm.lanes) {
+                val lightToUse = lane.light
+                if (lightToUse.name == PED_LIGHT) {
+                    addLightToStage(lightToUse)
                 }
             }
         }

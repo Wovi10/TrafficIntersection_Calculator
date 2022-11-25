@@ -18,7 +18,6 @@ import utils.Constants.TWO
 import utils.Constants.ZERO
 import utils.Constants.ZERO_DOUBLE
 import utils.Functions.printArray
-import utils.Functions.printArrayList
 
 class Intersection {
     private var numArms: Int
@@ -142,15 +141,13 @@ class Intersection {
             for (arm in arms) {
                 if (counter % TWO == ZERO && counter != ONE) {
                     addPedStage(output, counter + ONE)
-                } else {
-                    for (lane in arm.lanes) {
-                        val lightToUse = lane.light
-                        println(lightToUse.name)
-                        println(lane.startDangerZone.getCoords())
-                        if (lightToUse.name != PED_LIGHT) {
-                            if (!lightInPreviousStage(output, lightToUse)) {
-                                addStage(output, lightToUse, lane, counter + ONE)
-                            }
+                    counter++
+                }
+                for (lane in arm.lanes) {
+                    val lightToUse = lane.light
+                    if (lightToUse.name != PED_LIGHT) {
+                        if (!lightInPreviousStage(output, lightToUse)) {
+                            addStage(output, lightToUse, counter + ONE)
                         }
                     }
                 }
@@ -158,7 +155,7 @@ class Intersection {
                 counter++
             }
         }
-        printStages(output)
+//        printStages(output)
         return output
     }
 
@@ -183,14 +180,14 @@ class Intersection {
 
     private fun addPedStage(output: ArrayList<Stage>, stageNum: Int) {
         val stageToAdd = Stage(stageNum)
-        stageToAdd.calculateStates(intersectionLights, PED_LIGHT, null)
+        stageToAdd.calculateStates(arms, PED_LIGHT)
         output.add(stageToAdd)
     }
 
-    private fun addStage(output: ArrayList<Stage>, light: Light, laneToAdd: Lane, stageNum: Int) {
+    private fun addStage(output: ArrayList<Stage>, light: Light, stageNum: Int) {
         if (light.assigned) return
         val stageToAdd = Stage(stageNum)
-        stageToAdd.calculateStates(intersectionLights, NORMAL_LIGHT, laneToAdd)
+        stageToAdd.calculateStates(arms)
         output.add(stageToAdd)
     }
 
