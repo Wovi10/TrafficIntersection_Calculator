@@ -135,19 +135,28 @@ class Intersection {
     private fun calculateStages(): ArrayList<Stage> {
         val output: ArrayList<Stage> = ArrayList()
         var counter = ZERO
-        for (arm in intersectionLights) {
-            if (counter % TWO == ZERO) {
-                addPedStage(output, counter + ONE)
-            } else {
-                for (light in arm) {
-                    addCarStage(output, light, counter + ONE)
+        while (!allLightsAssigned()){
+            for (arm in intersectionLights) {
+                if (counter % TWO == ZERO) {
+                    addPedStage(output, counter + ONE)
+                } else {
+                    for (light in arm) {
+                        if (!lightInPreviousStage(output, light)) addStage(output, light, counter + ONE)
+                    }
                 }
+                counter++
             }
-            counter++
         }
         printArrayList(output)
 //        if (!allLightsAssigned()) calculateStages()
         return output
+    }
+
+    private fun lightInPreviousStage(output: ArrayList<Stage>, light: Light): Boolean {
+        for (stage in output) {
+            if (stage.lights.contains(light)) return true
+        }
+        return false
     }
 
     private fun addPedStage(output: ArrayList<Stage>, stageNum: Int) {
@@ -156,10 +165,11 @@ class Intersection {
         output.add(stageToAdd)
     }
 
-    private fun addCarStage(output: ArrayList<Stage>, light: Light, stageNum: Int) {
+    private fun addStage(output: ArrayList<Stage>, light: Light, stageNum: Int) {
         if (light.assigned) return
         val stageToAdd = Stage(stageNum)
         stageToAdd.calculateStates(intersectionLights, NORMAL_LIGHT)
+        output.add(stageToAdd)
     }
 
     private fun allLightsAssigned(): Boolean {

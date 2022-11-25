@@ -13,7 +13,7 @@ import utils.Functions.printArrayList
 
 class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
     private var duration: Double
-    private var lights: ArrayList<Light> = ArrayList()
+    var lights: ArrayList<Light> = ArrayList()
     private var name: String = EMPTY_STRING
     private var stageNumber: Int
 
@@ -26,18 +26,37 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
         if (lightName == PED_LIGHT) {
             addPedStage(allLights)
             return
+        }else{
+            addStage(allLights)
+            return
         }
-//        addStage(allLights)
     }
 
     private fun addStage(allLights: ArrayList<ArrayList<Light>>) {
         name = CAR_STAGE_NAME
         for (armLight in allLights) {
             for (light in armLight) {
-
+                if(!pathIsObstructed(light)){
+                    putPathInUse(light)
+                    addLightToStage(light)
+                }
             }
         }
-        TODO("Not yet implemented")
+    }
+
+    private fun putPathInUse(light: Light) {
+        for (dangerZone in light.lane.path) {
+            dangerZone.inUse = true
+        }
+    }
+
+    private fun pathIsObstructed(light: Light): Boolean {
+        for (dangerZone in light.lane.path) {
+            if (dangerZone.inUse){
+                return true
+            }
+        }
+        return false
     }
 
     private fun addPedStage(allLights: ArrayList<ArrayList<Light>>) {
@@ -45,12 +64,16 @@ class Stage(stageNum_: Int, duration_: Double = DEFAULT_STAGE_TIME) {
         for (armLights in allLights) {
             for (light in armLights) {
                 if (light.name == PED_LIGHT) {
-                    light.state = LightState.Green
-                    light.assigned = true
-                    lights.add(light)
+                    addLightToStage(light)
                 }
             }
         }
+    }
+
+    private fun addLightToStage(light: Light) {
+        light.state = LightState.Green
+        light.assigned = true
+        lights.add(light)
     }
 
     fun printLights(){

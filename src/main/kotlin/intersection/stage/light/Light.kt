@@ -1,5 +1,7 @@
 package intersection.stage.light
 
+import intersection.arm.lane.Lane
+
 class Light constructor(
     name_: String,
     state_: LightState = LightState.Red,
@@ -8,6 +10,7 @@ class Light constructor(
     var state: LightState
     val name: String
     var assigned: Boolean
+    lateinit var lane: Lane
 
     init {
         name = name_

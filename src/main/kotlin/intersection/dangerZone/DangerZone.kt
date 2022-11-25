@@ -7,7 +7,7 @@ import utils.Constants.TAB
 import utils.Constants.ZERO
 
 class DangerZone(xCoord_: Int = ZERO, yCoord_: Int = ZERO, isOutput_: Boolean = false) {
-    private var inUse: Boolean = false
+    var inUse: Boolean = false
     private var isOutput: Boolean = isOutput_
     private var sideLength: Int = ZERO
     val xCoord: Int = xCoord_
