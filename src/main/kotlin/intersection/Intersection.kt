@@ -12,6 +12,7 @@ import utils.Constants.NEWLINE
 import utils.Constants.NORMAL_LIGHT
 import utils.Constants.ONE
 import utils.Constants.PED_LIGHT
+import utils.Constants.TAB
 import utils.Constants.THREE
 import utils.Constants.TWO
 import utils.Constants.ZERO
@@ -137,35 +138,40 @@ class Intersection {
     private fun calculateStages(): ArrayList<Stage> {
         val output: ArrayList<Stage> = ArrayList()
         var counter = ZERO
-        var armCounter = ZERO
-        var laneCounter = ZERO
         while (!allLightsAssigned()){
-            for (arm in intersectionLights) {
-                if (counter % TWO == ZERO) {
+            for (arm in arms) {
+                if (counter % TWO == ZERO && counter != ONE) {
                     addPedStage(output, counter + ONE)
                 } else {
-                    for (light in arm) {
-                        if(light.name != PED_LIGHT){
-                            val laneToAdd = arms[armCounter].lanes[laneCounter]
-                            if (!lightInPreviousStage(output, light)) addStage(output, light, laneToAdd, counter + ONE)
-                            laneCounter++
+                    for (lane in arm.lanes) {
+                        val lightToUse = lane.light
+                        println(lightToUse.name)
+                        println(lane.startDangerZone.getCoords())
+                        if (lightToUse.name != PED_LIGHT) {
+                            if (!lightInPreviousStage(output, lightToUse)) {
+                                addStage(output, lightToUse, lane, counter + ONE)
+                            }
                         }
                     }
-                    laneCounter = ZERO
-                    armCounter++
                 }
                 printStage(output[counter])
                 counter++
             }
-            armCounter = ZERO
         }
         printStages(output)
         return output
     }
 
     private fun printStage(stage: Stage) {
-        printArrayList(stage.lights)
-        printArrayList(stage.lights)
+        var output = EMPTY_STRING
+        for (i in ZERO until stage.lanes.size){
+            output += "lane: ${stage.lanes[i].startDangerZone.getCoords()}"
+            output += TAB
+            output += "light: ${stage.lights[i].name}"
+            output += NEWLINE
+        }
+        println(output)
+        println()
     }
 
     private fun lightInPreviousStage(output: ArrayList<Stage>, light: Light): Boolean {
